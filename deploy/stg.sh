@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 APP_NAME=webbe
 
 docker load -i ${APP_NAME}.tar
