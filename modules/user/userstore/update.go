@@ -6,7 +6,7 @@ import (
 	"web/modules/user/usermodel"
 )
 
-func (s *sqlStore) UpdateStatusUser(ctx context.Context, id int, data *usermodel.UserUpdate) error {
+func (s *sqlStore) UpdateUser(ctx context.Context, id int, data *usermodel.UserUpdate) error {
 	db := s.db
 
 	if err := db.Table(usermodel.User{}.TableName()).Where("id = ?", id).Updates(data).Error; err != nil {

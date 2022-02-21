@@ -10,10 +10,11 @@ import (
 )
 
 func ErrWrongAuthHeader(err error) *common.AppError {
-	return common.NewCustomError(
+	return common.NewFullErrorResponse(401,
 		err,
 		fmt.Sprintf("Wrong authen header"),
 		fmt.Sprintf("ErrWrongAuthHeader"),
+		"Unauthorization",
 	)
 }
 

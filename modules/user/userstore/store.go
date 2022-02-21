@@ -29,5 +29,5 @@ type UserStore interface {
 		paging *common.Paging,
 		moreKey ...string,
 	) ([]usermodel.User, error)
-	UpdateStatusUser(ctx context.Context, id int, data *usermodel.UserUpdate) error
+	UpdateUser(ctx context.Context, id int, data *usermodel.UserUpdate) error
 }

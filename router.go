@@ -19,7 +19,12 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 		user := v1.Group("/user", middleware.RequireAuthUserFeature(appCtx))
 		{
 			user.GET("", ginuser.ListUser(appCtx))
-			user.POST("/user", ginuser.CreateUser(appCtx))
+			user.POST("", ginuser.CreateUser(appCtx))
+			user.PUT("/:user_id", ginuser.UpdateUser(appCtx))
+		}
+		role := v1.Group("/role")
+		{
+			role.GET("", ginuser.GetListRole(appCtx))
 		}
 	}
 }

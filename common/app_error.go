@@ -104,10 +104,11 @@ func ErrInvalidRequest(err error) *AppError {
 }
 
 func ErrDataNotFound(entity string) *AppError {
-	return NewCustomError(
+	return NewFullErrorResponse(404,
 		nil,
 		fmt.Sprintf("%s Not Found", strings.ToLower(entity)),
 		fmt.Sprintf("ErrDataNotFound%s", entity),
+		"ErrDataNotFound",
 	)
 }
 

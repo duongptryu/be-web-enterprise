@@ -27,13 +27,13 @@ func (User) TableName() string {
 
 type UserCreate struct {
 	common.SQLModelCreate
-	FullName    string    `json:"full_name" gorm:"full_name" binding:"require"`
-	Email       string    `json:"email" gorm:"email" binding:"require"`
-	Password    string    `json:"password" gorm:"password" binding:"require"`
-	Gender      string    `json:"gender" gorm:"gender" binding:"require"`
-	Department  string    `json:"department" gorm:"department" binding:"require"`
-	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth" binding:"require"`
-	Role        string    `json:"role" gorm:"role" binding:"require"`
+	FullName    string    `json:"full_name" gorm:"full_name" binding:"required"`
+	Email       string    `json:"email" gorm:"email" binding:"required"`
+	Password    string    `json:"password" gorm:"password" binding:"required"`
+	Gender      string    `json:"gender" gorm:"gender" binding:"required"`
+	Department  string    `json:"department" gorm:"department" binding:"required"`
+	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth" binding:"required"`
+	Role        string    `json:"role" gorm:"role" binding:"required"`
 	Status      bool      `json:"status" gorm:"status"`
 }
 
@@ -49,7 +49,6 @@ type UserUpdate struct {
 	common.SQLModelUpdate
 	FullName    string    `json:"full_name" gorm:"full_name"`
 	Email       string    `json:"email" gorm:"email"`
-	Password    string    `json:"password" gorm:"password"`
 	Gender      string    `json:"gender" gorm:"gender"`
 	Department  string    `json:"department" gorm:"department"`
 	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth"`
