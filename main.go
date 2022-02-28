@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"web/components/config"
@@ -28,6 +29,7 @@ func runService() {
 	appCtx := setupAppContext(appConfig)
 
 	r := gin.Default()
+	r.Use(cors.Default())
 
 	setupRouter(r, appCtx)
 
