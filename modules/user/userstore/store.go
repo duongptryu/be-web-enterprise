@@ -2,9 +2,10 @@ package userstore
 
 import (
 	"context"
-	"gorm.io/gorm"
 	"web/common"
 	"web/modules/user/usermodel"
+
+	"gorm.io/gorm"
 )
 
 type sqlStore struct {
@@ -30,4 +31,5 @@ type UserStore interface {
 		moreKey ...string,
 	) ([]usermodel.User, error)
 	UpdateUser(ctx context.Context, id int, data *usermodel.UserUpdate) error
+	SoftDeleteUser(ctx context.Context, id int) error
 }
