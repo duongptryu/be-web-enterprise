@@ -23,6 +23,7 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 			user.POST("", ginuser.CreateUser(appCtx))
 			user.PUT("/:user_id", ginuser.UpdateUser(appCtx))
 			user.DELETE("/:user_id", ginuser.SoftDeleteUser(appCtx))
+			user.GET("/profile", ginuser.GetProfileUser(appCtx))
 		}
 		role := v1.Group("/role")
 		{
