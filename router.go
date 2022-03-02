@@ -20,12 +20,13 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 	{
 		v1.POST("/login", ginuser.UserLogin(appCtx))
 		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
+		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
 
 		role := v1.Group("/role")
 		{
 			role.GET("", ginuser.GetListRole(appCtx))
 		}
-		
+
 		admin := v1.Group("/admin", middleware.RequireAdminAuth(appCtx))
 		{
 			academicYear := admin.Group("/academic-year")

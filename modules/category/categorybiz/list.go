@@ -25,3 +25,12 @@ func (biz *listCategoryBiz) ListCategoryBiz(ctx context.Context, paging *common.
 
 	return result, nil
 }
+
+func (biz *listCategoryBiz) ListCategoryBizForStaff(ctx context.Context, paging *common.Paging, filter *categorymodel.Filter) ([]categorymodel.Category, error) {
+	result, err := biz.store.ListCategory(ctx, map[string]interface{}{"status": true}, filter, paging)
+	if err != nil {
+		return nil, common.ErrCannotListEntity(categorymodel.EntityName, err)
+	}
+
+	return result, nil
+}
