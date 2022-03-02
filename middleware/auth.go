@@ -28,35 +28,7 @@ func extracTokenFromHeaderString(s string) (string, error) {
 	return parts[1], nil
 }
 
-func RequireAuth(appCtx component.AppContext) func(c *gin.Context) {
-	tokenProvider := appCtx.GetTokenProvider()
-	//myCache := appCtx.GetMyCache()
-	return func(c *gin.Context) {
-		token, err := extracTokenFromHeaderString(c.GetHeader("Authorization"))
-		if err != nil {
-			panic(err)
-		}
-
-		payload, err := tokenProvider.Validate(token)
-		if err != nil {
-			panic(err)
-		}
-		//
-		//userId, err := myCache.Get(common.KeyTokenCache + token)
-		//if err != nil {
-		//	panic(ErrNotFound)
-		//}
-		//
-		//if payload.UserId != userId.(int) {
-		//	panic(ErrInvalidToken)
-		//}
-
-		c.Set(common.KeyUserHeader, payload.UserId)
-		c.Next()
-	}
-}
-
-func RequireAuthUserFeature(appCtx component.AppContext) func(c *gin.Context) {
+func RequireAdminAuth(appCtx component.AppContext) func(c *gin.Context) {
 	tokenProvider := appCtx.GetTokenProvider()
 	return func(c *gin.Context) {
 		token, err := extracTokenFromHeaderString(c.GetHeader("Authorization"))
@@ -70,6 +42,28 @@ func RequireAuthUserFeature(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		if payload.Role != common.RoleAdmin {
+			panic(ErrInvalidToken)
+		}
+
+		c.Set(common.KeyUserHeader, payload.UserId)
+		c.Next()
+	}
+}
+
+func RequireQAMAuth(appCtx component.AppContext) func(c *gin.Context) {
+	tokenProvider := appCtx.GetTokenProvider()
+	return func(c *gin.Context) {
+		token, err := extracTokenFromHeaderString(c.GetHeader("Authorization"))
+		if err != nil {
+			panic(err)
+		}
+
+		payload, err := tokenProvider.Validate(token)
+		if err != nil {
+			panic(err)
+		}
+
+		if payload.Role != common.RoleQAManager {
 			panic(ErrInvalidToken)
 		}
 
