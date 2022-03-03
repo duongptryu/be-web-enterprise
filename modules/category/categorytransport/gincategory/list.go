@@ -51,8 +51,9 @@ func ListCategoryForStaff(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		var paging common.Paging
-		if err := c.ShouldBind(&paging); err != nil {
-			panic(common.ErrParseJson(err))
+		query := c.Query("query")
+		if err := paging.ParsePaging(query); err != nil {
+			panic(err)
 		}
 		paging.Fulfill()
 

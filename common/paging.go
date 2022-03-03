@@ -14,6 +14,9 @@ type Paging struct {
 }
 
 func (p *Paging) ParsePaging(input string) error {
+	if len(input) == 0{
+		return nil
+	}
 	decodedValue, err := url.QueryUnescape(input)
 	if err != nil {
 		return ErrParseJson(err)
