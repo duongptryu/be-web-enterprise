@@ -28,6 +28,24 @@ func extracTokenFromHeaderString(s string) (string, error) {
 	return parts[1], nil
 }
 
+func RequireAuth(appCtx component.AppContext) func(c *gin.Context) {
+	tokenProvider := appCtx.GetTokenProvider()
+	return func(c *gin.Context) {
+		token, err := extracTokenFromHeaderString(c.GetHeader("Authorization"))
+		if err != nil {
+			panic(err)
+		}
+
+		payload, err := tokenProvider.Validate(token)
+		if err != nil {
+			panic(err)
+		}
+
+		c.Set(common.KeyUserHeader, payload.UserId)
+		c.Next()
+	}
+}
+
 func RequireAdminAuth(appCtx component.AppContext) func(c *gin.Context) {
 	tokenProvider := appCtx.GetTokenProvider()
 	return func(c *gin.Context) {

@@ -19,8 +19,6 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/login", ginuser.UserLogin(appCtx))
-		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
-		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
 
 		role := v1.Group("/role")
 		{
@@ -57,5 +55,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 			}
 		}
 
+		v1.Use(middleware.RequireAuth(appCtx))
+		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
+		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
 	}
 }
