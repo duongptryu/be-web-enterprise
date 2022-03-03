@@ -1,11 +1,28 @@
 package common
 
+import (
+	"encoding/json"
+	"net/url"
+)
+
 type Paging struct {
 	Page       int   `json:"page" form:"page"`
 	Limit      int   `json:"limit" form:"limit"`
 	Total      int64 `json:"total" form:"total"`
 	FakeCursor int   `json:"cursor" form:"cursor"`
 	NextCursor int   `json:"next_cursor"`
+}
+
+func (p *Paging) ParsePaging(input string) error {
+	decodedValue, err := url.QueryUnescape(input)
+	if err != nil {
+		return ErrParseJson(err)
+	}
+
+	if err := json.Unmarshal([]byte(decodedValue), p); err != nil {
+		return ErrParseJson(err)
+	}
+	return nil
 }
 
 func (p *Paging) Fulfill() {
