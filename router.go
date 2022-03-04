@@ -6,6 +6,7 @@ import (
 	"web/modules/acayear/acayeartransport/ginacayear"
 	"web/modules/category/categorytransport/gincategory"
 	"web/modules/idea/ideatransport/ginidea"
+	"web/modules/upload/uploadtransport/ginupload"
 	"web/modules/user/usertransport/ginuser"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,7 @@ import (
 
 func setupRouter(r *gin.Engine, appCtx component.AppContext) {
 	r.Use(middleware.Recover(appCtx))
+	r.Static("/assets", "./static")
 	v1Route(r, appCtx)
 }
 
@@ -66,8 +68,12 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 		}
 
 		v1.Use(middleware.RequireAuth(appCtx))
+		v1.POST("/upload", ginupload.Upload(appCtx))
+
 		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
+
 		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
+
 		v1.GET("/idea", ginidea.ListIdeaForStaff(appCtx))
 		v1.GET("/idea/:idea_id", ginidea.FindIdeaForStaff(appCtx))
 	}

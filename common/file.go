@@ -10,7 +10,7 @@ import (
 type File struct {
 	SQLModelCreate
 	Url  string `json:"url" gorm:"column:url;"`
-	Name int    `json:"name" gorm:"column:name"`
+	Name string `json:"name" gorm:"column:name"`
 	Size int    `json:"size" gorm:"column:size"`
 	Ext  string `json:"ext,omitempty" gorm:"column:ext"`
 }
