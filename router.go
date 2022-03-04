@@ -5,6 +5,7 @@ import (
 	"web/middleware"
 	"web/modules/acayear/acayeartransport/ginacayear"
 	"web/modules/category/categorytransport/gincategory"
+	"web/modules/idea/ideatransport/ginidea"
 	"web/modules/user/usertransport/ginuser"
 
 	"github.com/gin-gonic/gin"
@@ -42,6 +43,15 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 				user.PUT("/:user_id", ginuser.UpdateUser(appCtx))
 				user.DELETE("/:user_id", ginuser.SoftDeleteUser(appCtx))
 			}
+
+			idea := admin.Group("/idea")
+			{
+				idea.GET("", ginidea.ListIdea(appCtx))
+				idea.POST("", ginidea.CreateIdea(appCtx))
+				idea.GET("/:idea_id", ginidea.FindIdea(appCtx))
+				idea.PUT("/:idea_id", ginidea.UpdateIdea(appCtx))
+				idea.DELETE("/:idea_id", ginidea.DeleteIdea(appCtx))
+			}
 		}
 
 		QAM := v1.Group("/qam", middleware.RequireQAMAuth(appCtx))
@@ -58,5 +68,7 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 		v1.Use(middleware.RequireAuth(appCtx))
 		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
 		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
+		v1.GET("/idea", ginidea.ListIdeaForStaff(appCtx))
+		v1.GET("/idea/:idea_id", ginidea.FindIdeaForStaff(appCtx))
 	}
 }
