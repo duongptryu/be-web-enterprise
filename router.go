@@ -51,7 +51,7 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 				cate.GET("", gincategory.ListCategory(appCtx))
 				cate.POST("", gincategory.CreateCategory(appCtx))
 				cate.PUT("/:cate_id", gincategory.UpdateCategory(appCtx))
-				cate.DELETE("/:user_id", gincategory.DeleteCategory(appCtx))
+				cate.DELETE("/:cate_id", gincategory.DeleteCategory(appCtx))
 			}
 		}
 
