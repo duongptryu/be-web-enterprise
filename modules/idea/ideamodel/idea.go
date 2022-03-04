@@ -25,6 +25,10 @@ func (Idea) TableName() string {
 	return "ideas"
 }
 
+func (data *Idea) GetIdeaId() int {
+	return data.Id
+}
+
 type IdeaCreate struct {
 	common.SQLModelCreate
 	Title         string        `json:"title" gorm:"column:title"`

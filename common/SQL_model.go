@@ -14,6 +14,11 @@ type SQLModelCreate struct {
 	UpdatedAt *time.Time `json:"-" gorm:"updated_at"`
 }
 
+type SQLModelCreateNoId struct {
+	CreatedAt *time.Time `json:"-" gorm:"created_at"`
+	UpdatedAt *time.Time `json:"-" gorm:"updated_at"`
+}
+
 type SQLModelUpdate struct {
 	UpdatedAt *time.Time `json:"-" gorm:"updated_at"`
 }
