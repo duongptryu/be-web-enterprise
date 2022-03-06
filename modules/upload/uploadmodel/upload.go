@@ -5,7 +5,7 @@ import (
 	"web/common"
 )
 
-const PathFile = "https://groupbar.me/static/"
+const PathFile = "https://groupbar.me/assets/"
 
 func ErrCannotSaveFile(err error) *common.AppError {
 	return common.NewCustomError(
