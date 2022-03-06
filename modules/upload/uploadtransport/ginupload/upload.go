@@ -11,7 +11,7 @@ import (
 
 func Upload(appCtx component.AppContext) func(ctx *gin.Context) {
 	return func(c *gin.Context) {
-		fileHeader, err := c.FormFile("file")
+		fileHeader, err := c.FormFile("upload")
 		if err != nil {
 			panic(common.ErrInvalidRequest(err))
 		}
