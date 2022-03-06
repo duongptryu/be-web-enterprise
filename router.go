@@ -14,7 +14,7 @@ import (
 
 func setupRouter(r *gin.Engine, appCtx component.AppContext) {
 	r.Use(middleware.Recover(appCtx))
-	r.Static("/assets", "./assets")
+	r.Static("/assets", "/tmp")
 	v1Route(r, appCtx)
 }
 
