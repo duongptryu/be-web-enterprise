@@ -17,17 +17,21 @@ func NewDeleteIdeaBiz(store ideastore.IdeaStore) *deleteIdeaBiz {
 	}
 }
 
-func (biz *deleteIdeaBiz) DeleteIdeaBiz(ctx context.Context, cateId int) error {
-	cateDB, err := biz.store.FindIdea(ctx, map[string]interface{}{"id": cateId})
+func (biz *deleteIdeaBiz) DeleteIdeaBiz(ctx context.Context, ideaId int, userId int) error {
+	ideaDB, err := biz.store.FindIdea(ctx, map[string]interface{}{"id": ideaId, "status": true})
 	if err != nil {
 		return common.ErrCannotDeleteEntity(ideamodel.EntityName, err)
 	}
-	if cateDB.Id == 0 {
+	if ideaDB.Id == 0 {
 		return common.ErrDataNotFound(ideamodel.EntityName)
 	}
 
+	if ideaDB.UserId != userId {
+		return common.ErrPermissionDenied
+	}
+
 	//create user in db
-	if err := biz.store.DeleteIdea(ctx, cateId); err != nil {
+	if err := biz.store.DeleteIdea(ctx, ideaId); err != nil {
 		return common.ErrCannotDeleteEntity(ideamodel.EntityName, err)
 	}
 

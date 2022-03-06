@@ -18,18 +18,24 @@ func NewFindIdeaBiz(store ideastore.IdeaStore) *findIdeaBiz {
 }
 
 func (biz *findIdeaBiz) FindIdeaBiz(ctx context.Context, id int) (*ideamodel.Idea, error) {
-	result, err := biz.store.FindIdea(ctx, map[string]interface{}{"id": id})
+	result, err := biz.store.FindIdea(ctx, map[string]interface{}{"id": id}, "User", "Category")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(ideamodel.EntityName, err)
+	}
+	if result.Id == 0 {
+		return nil, common.ErrDataNotFound(ideamodel.EntityName)
 	}
 
 	return result, nil
 }
 
 func (biz *findIdeaBiz) FindIdeaBizForStaff(ctx context.Context, id int) (*ideamodel.Idea, error) {
-	result, err := biz.store.FindIdea(ctx, map[string]interface{}{"id": id, "status": true})
+	result, err := biz.store.FindIdea(ctx, map[string]interface{}{"id": id, "status": true}, "User", "Category")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(ideamodel.EntityName, err)
+	}
+	if result.Id == 0 {
+		return nil, common.ErrDataNotFound(ideamodel.EntityName)
 	}
 
 	return result, nil

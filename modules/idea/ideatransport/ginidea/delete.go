@@ -16,10 +16,12 @@ func DeleteIdea(appCtx component.AppContext) func(c *gin.Context) {
 			panic(common.ErrParseJson(err))
 		}
 
+		userId := c.MustGet(common.KeyUserHeader).(int)
+
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())
 		biz := ideabiz.NewDeleteIdeaBiz(store)
 
-		if err := biz.DeleteIdeaBiz(c.Request.Context(), ideaId); err != nil {
+		if err := biz.DeleteIdeaBiz(c.Request.Context(), ideaId, userId); err != nil {
 			panic(err)
 		}
 

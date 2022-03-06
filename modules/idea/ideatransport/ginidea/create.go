@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"web/common"
 	component "web/components"
+	"web/modules/acayear/acayearstore"
+	"web/modules/category/categorystore"
 	"web/modules/idea/ideabiz"
 	"web/modules/idea/ideamodel"
 	"web/modules/idea/ideastore"
@@ -17,8 +19,13 @@ func CreateIdea(appCtx component.AppContext) func(c *gin.Context) {
 			panic(common.ErrParseJson(err))
 		}
 
+		data.UserId = c.MustGet(common.KeyUserHeader).(int)
+
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewCreateIdeaBiz(store)
+		categoryStore := categorystore.NewSQLStore(appCtx.GetDatabase())
+		acaYearStore := acayearstore.NewSQLStore(appCtx.GetDatabase())
+
+		biz := ideabiz.NewCreateIdeaBiz(store, categoryStore, acaYearStore)
 
 		if err := biz.CreateIdeaBiz(c.Request.Context(), &data); err != nil {
 			panic(err)

@@ -16,20 +16,20 @@ func Upload(appCtx component.AppContext) func(ctx *gin.Context) {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		//store image into own system
-		c.SaveUploadedFile(fileHeader, fmt.Sprintf("./static/%s", fileHeader.Filename))
-
 		if err != nil {
 			panic(common.ErrInvalidRequest(err))
 		}
 
 		fileStore := uploadstore.NewSQLStore(appCtx.GetDatabase())
 		biz := uploadbiz.NewUploadFileBiz(fileStore)
-		img, err := biz.UploadFileBiz(c.Request.Context(), fileHeader.Filename, fileHeader.Size)
+		f, err := biz.UploadFileBiz(c.Request.Context(), fileHeader.Filename, fileHeader.Size)
+
+		//store image into own system
+		c.SaveUploadedFile(fileHeader, fmt.Sprintf("./assets/%s", f.Name))
 
 		if err != nil {
 			panic(err)
 		}
-		c.JSON(200, common.NewSimpleSuccessResponse(img))
+		c.JSON(200, common.NewSimpleSuccessResponse(f))
 	}
 }

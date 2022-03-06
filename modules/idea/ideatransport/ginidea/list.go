@@ -74,3 +74,37 @@ func ListIdeaForStaff(appCtx component.AppContext) gin.HandlerFunc {
 		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
 	}
 }
+
+func ListAllIdeaOwner(appCtx component.AppContext) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var filter ideamodel.Filter
+		if err := c.ShouldBind(&filter); err != nil {
+			panic(common.ErrParseJson(err))
+		}
+
+		var paging common.Paging
+		query := c.Query("query")
+		if err := paging.ParsePaging(query); err != nil {
+			panic(err)
+		}
+		paging.Fulfill()
+
+		userId := c.MustGet(common.KeyUserHeader).(int)
+
+		store := ideastore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewListIdeaBiz(store)
+
+		result, err := biz.ListIdeaForOwner(c.Request.Context(), userId, &paging, &filter)
+		if err != nil {
+			panic(err)
+		}
+
+		for i := range result {
+			if i == len(result)-1 {
+				paging.NextCursor = result[i].Id
+			}
+		}
+
+		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
+	}
+}

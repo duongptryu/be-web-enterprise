@@ -14,7 +14,6 @@ import (
 	"web/components/config"
 	"web/components/mycache"
 	"web/components/tokenprovider/jwt"
-	"web/components/uploadprovider"
 	"web/modules/user/usermodel"
 	"web/modules/user/userstore"
 	"web/pubsub/pubsublocal"
@@ -41,13 +40,13 @@ func setupAppContext(appConfig *config.AppConfig) component.AppContext {
 	tokenProvider := jwt.NewJwtProvider(appConfig.Token)
 
 	//init upload provider
-	s3Provider := uploadprovider.NewS3Provider(appConfig.S3AWS.BucketName, appConfig.S3AWS.Region, appConfig.S3AWS.ApiKey, appConfig.S3AWS.Secret, appConfig.S3AWS.Domain)
+	//s3Provider := uploadprovider.NewS3Provider(appConfig.S3AWS.BucketName, appConfig.S3AWS.Region, appConfig.S3AWS.ApiKey, appConfig.S3AWS.Secret, appConfig.S3AWS.Domain)
 
 	//init pubsub local
 	pubSubLocal := pubsublocal.NewPubSub()
 
 	//init app context
-	appCtx := component.NewAppContext(appConfig, FDDatabase, myCache, tokenProvider, s3Provider, pubSubLocal)
+	appCtx := component.NewAppContext(appConfig, FDDatabase, myCache, tokenProvider, pubSubLocal)
 
 	//setup subscribe
 	subscribe.SetupSubscribe(appCtx)

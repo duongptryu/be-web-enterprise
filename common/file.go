@@ -9,14 +9,15 @@ import (
 
 type File struct {
 	SQLModelCreate
-	Url  string `json:"url" gorm:"column:url;"`
-	Name string `json:"name" gorm:"column:name"`
-	Size int    `json:"size" gorm:"column:size"`
-	Ext  string `json:"ext,omitempty" gorm:"column:ext"`
+	Url        string  `json:"url" gorm:"column:url;"`
+	Name       string  `json:"name" gorm:"column:name"`
+	NameOrigin string  `json:"name_origin" gorm:"column:name_origin"`
+	Size       float64 `json:"size" gorm:"column:size"`
+	Ext        string  `json:"ext,omitempty" gorm:"column:ext"`
 }
 
 func (File) TableName() string {
-	return "images"
+	return "files"
 }
 
 func (f *File) Scan(value interface{}) error {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"path/filepath"
+	"strings"
 	"time"
 	"web/common"
 	"web/modules/upload/uploadmodel"
@@ -22,12 +23,15 @@ func NewUploadFileBiz(store uploadstore.FileStore) *uploadFileBiz {
 
 func (biz *uploadFileBiz) UploadFileBiz(ctx context.Context, fileName string, fileSize int64) (*common.File, error) {
 	fileExt := filepath.Ext(fileName)
-	newFileName := fmt.Sprintf("%d%s", time.Now().Nanosecond(), fileExt)
+	fileName = strings.ReplaceAll(fileName, " ", "_")
+	fileName = strings.ReplaceAll(fileName, "/", "_")
+	newFileName := fmt.Sprintf("%s-%d%s", fileName, time.Now().Nanosecond(), fileExt)
 
 	file := common.File{
 		SQLModelCreate: common.SQLModelCreate{},
-		Name:           fileName,
-		Size:           int(fileSize),
+		Name:           newFileName,
+		NameOrigin:     fileName,
+		Size:           float64(fileSize),
 		Ext:            filepath.Ext(fileName),
 		Url:            uploadmodel.PathFile + newFileName,
 	}

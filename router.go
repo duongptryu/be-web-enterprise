@@ -14,7 +14,7 @@ import (
 
 func setupRouter(r *gin.Engine, appCtx component.AppContext) {
 	r.Use(middleware.Recover(appCtx))
-	r.Static("/assets", "./static")
+	r.Static("/assets", "./assets")
 	v1Route(r, appCtx)
 }
 
@@ -50,8 +50,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 			{
 				idea.GET("", ginidea.ListIdea(appCtx))
 				idea.POST("", ginidea.CreateIdea(appCtx))
-				idea.GET("/:idea_id", ginidea.FindIdea(appCtx))
 				idea.PUT("/:idea_id", ginidea.UpdateIdea(appCtx))
+				idea.GET("/:idea_id", ginidea.FindIdea(appCtx))
 				idea.DELETE("/:idea_id", ginidea.DeleteIdea(appCtx))
 			}
 		}
@@ -74,7 +74,14 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 
 		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
 
-		v1.GET("/idea", ginidea.ListIdeaForStaff(appCtx))
-		v1.GET("/idea/:idea_id", ginidea.FindIdeaForStaff(appCtx))
+		staffIdea := v1.Group("/idea")
+		{
+			staffIdea.GET("", ginidea.ListIdeaForStaff(appCtx))
+			staffIdea.GET("/:idea_id", ginidea.FindIdeaForStaff(appCtx))
+			staffIdea.GET("/my-idea", ginidea.ListAllIdeaOwner(appCtx))
+			staffIdea.POST("", ginidea.CreateIdea(appCtx))
+			staffIdea.PUT("/:idea_id", ginidea.UpdateIdea(appCtx))
+			staffIdea.DELETE("/:idea_id", ginidea.DeleteIdea(appCtx))
+		}
 	}
 }

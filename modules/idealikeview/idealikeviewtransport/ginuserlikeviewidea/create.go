@@ -18,7 +18,7 @@ func CreateUserLikeIdea(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		store := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := idealikeviewbiz.NewCreateIdeaBiz(store)
+		biz := idealikeviewbiz.NewCreateIdeaBiz(store, appCtx.GetPubSub())
 
 		if err := biz.CreateUserLikeIdeaBiz(c.Request.Context(), &data); err != nil {
 			panic(err)
@@ -37,7 +37,7 @@ func CreateUserDislikeIdea(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		store := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := idealikeviewbiz.NewCreateIdeaBiz(store)
+		biz := idealikeviewbiz.NewCreateIdeaBiz(store, appCtx.GetPubSub())
 
 		if err := biz.CreateUserDislikeIdeaBiz(c.Request.Context(), &data); err != nil {
 			panic(err)
@@ -46,4 +46,3 @@ func CreateUserDislikeIdea(appCtx component.AppContext) func(c *gin.Context) {
 		c.JSON(201, common.NewSimpleSuccessResponse(true))
 	}
 }
-

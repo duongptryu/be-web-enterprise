@@ -41,3 +41,23 @@ func (s *sqlStore) ListCategory(ctx context.Context,
 	}
 	return result, nil
 }
+
+func (s *sqlStore) ListAllCategory(ctx context.Context,
+	condition map[string]interface{},
+	moreKey ...string,
+) ([]categorymodel.Category, error) {
+	var result []categorymodel.Category
+
+	db := s.db
+
+	db = db.Table(categorymodel.Category{}.TableName()).Where(condition)
+
+	for i := range moreKey {
+		db = db.Preload(moreKey[i])
+	}
+
+	if err := db.Order("id desc").Find(&result).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+	return result, nil
+}

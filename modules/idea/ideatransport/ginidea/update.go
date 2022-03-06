@@ -18,15 +18,16 @@ func UpdateIdea(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		var data ideamodel.IdeaUpdate
-
 		if err := c.ShouldBindJSON(&data); err != nil {
 			panic(common.ErrParseJson(err))
 		}
 
+		userId := c.MustGet(common.KeyUserHeader).(int)
+
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())
 		biz := ideabiz.NewUpdateIdeaBiz(store)
 
-		if err := biz.UpdateIdeaBiz(c.Request.Context(), ideaId, &data); err != nil {
+		if err := biz.UpdateIdeaBiz(c.Request.Context(), ideaId, userId, &data); err != nil {
 			panic(err)
 		}
 

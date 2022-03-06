@@ -31,4 +31,8 @@ type CategoryStore interface {
 		moreKey ...string,
 	) ([]categorymodel.Category, error)
 	UpdateCategory(ctx context.Context, id int, data *categorymodel.CategoryUpdate) error
+	ListAllCategory(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) ([]categorymodel.Category, error)
 }
