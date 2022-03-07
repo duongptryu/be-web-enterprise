@@ -12,6 +12,7 @@ import (
 	"web/common"
 	"web/components"
 	"web/components/config"
+	"web/components/mailprovider/sendgridprovider"
 	"web/components/mycache"
 	"web/components/tokenprovider/jwt"
 	"web/modules/user/usermodel"
@@ -45,8 +46,13 @@ func setupAppContext(appConfig *config.AppConfig) component.AppContext {
 	//init pubsub local
 	pubSubLocal := pubsublocal.NewPubSub()
 
+	//init sendgrid provider
+	sendgridMail := sendgridprovider.NewSendGridProvider(appConfig.SendgridSecretKey)
+	//init smtpProvider
+	//smtpProvider := smtp.NewSmtpProvider(appConfig.Smtp.Email, appConfig.Smtp.Password)
+
 	//init app context
-	appCtx := component.NewAppContext(appConfig, FDDatabase, myCache, tokenProvider, pubSubLocal)
+	appCtx := component.NewAppContext(appConfig, FDDatabase, myCache, tokenProvider, pubSubLocal, sendgridMail)
 
 	//setup subscribe
 	subscribe.SetupSubscribe(appCtx)
@@ -82,6 +88,7 @@ func InitAdminAccount(appCtx component.AppContext) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	status := true
 	if userDB.Id == 0 {
 		adminAccount := usermodel.UserCreate{
 			Email:       "admin@gmail.com",
@@ -91,7 +98,7 @@ func InitAdminAccount(appCtx component.AppContext) {
 			Department:  "ADMIN",
 			Role:        common.RoleAdmin,
 			DateOfBirth: time.Now(),
-			Status:      true,
+			Status:      &status,
 		}
 
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(adminAccount.Password), bcrypt.DefaultCost)

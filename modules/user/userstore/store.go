@@ -32,4 +32,8 @@ type UserStore interface {
 	) ([]usermodel.User, error)
 	UpdateUser(ctx context.Context, id int, data *usermodel.UserUpdate) error
 	SoftDeleteUser(ctx context.Context, id int) error
+	ListUserWithoutPaging(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) ([]usermodel.User, error)
 }

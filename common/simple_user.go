@@ -1,7 +1,7 @@
 package common
 
 type SimpleUser struct {
-	SQLModel
+	Id       int    `json:"id" gorm:"column:id"`
 	FullName string `json:"full_name" gorm:"column:full_name"`
 	Role     string `json:"role" gorm:"column:role;"`
 }

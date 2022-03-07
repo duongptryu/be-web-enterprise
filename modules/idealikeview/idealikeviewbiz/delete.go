@@ -5,15 +5,18 @@ import (
 	"web/common"
 	"web/modules/idea/ideamodel"
 	"web/modules/idealikeview/idealikeviewstore"
+	"web/pubsub"
 )
 
 type deleteUserLikeViewIdeaStore struct {
-	store idealikeviewstore.UserLikeViewIdeaStore
+	store  idealikeviewstore.UserLikeViewIdeaStore
+	pubSub pubsub.PubSub
 }
 
-func NewDeleteIdeaBiz(store idealikeviewstore.UserLikeViewIdeaStore) *deleteUserLikeViewIdeaStore {
+func NewDeleteIdeaBiz(store idealikeviewstore.UserLikeViewIdeaStore, pubSub pubsub.PubSub) *deleteUserLikeViewIdeaStore {
 	return &deleteUserLikeViewIdeaStore{
-		store: store,
+		store:  store,
+		pubSub: pubSub,
 	}
 }
 
@@ -23,6 +26,8 @@ func (biz *deleteUserLikeViewIdeaStore) DeleteUserLikeIdea(ctx context.Context, 
 		return common.ErrCannotDeleteEntity(ideamodel.EntityName, err)
 	}
 
+	go biz.pubSub.Publish(ctx, common.TopicDecreaseLikeCountIdea, pubsub.NewMessage(ideaId))
+
 	return nil
 }
 
@@ -31,6 +36,8 @@ func (biz *deleteUserLikeViewIdeaStore) DeleteUserDislikeIdea(ctx context.Contex
 	if err := biz.store.DeleteUserDislikeIdea(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaId}); err != nil {
 		return common.ErrCannotDeleteEntity(ideamodel.EntityName, err)
 	}
+
+	go biz.pubSub.Publish(ctx, common.TopicDecreaseDisLikeCountIdea, pubsub.NewMessage(ideaId))
 
 	return nil
 }

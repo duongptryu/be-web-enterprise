@@ -8,6 +8,7 @@ import (
 	component "web/components"
 	"web/modules/idea/ideabiz"
 	"web/modules/idea/ideastore"
+	"web/modules/idealikeview/idealikeviewstore"
 )
 
 func FindIdea(appCtx component.AppContext) gin.HandlerFunc {
@@ -17,10 +18,13 @@ func FindIdea(appCtx component.AppContext) gin.HandlerFunc {
 			panic(common.ErrParseJson(err))
 		}
 
-		store := ideastore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewFindIdeaBiz(store)
+		userId := c.MustGet(common.KeyUserHeader).(int)
 
-		result, err := biz.FindIdeaBiz(c.Request.Context(), ideaId)
+		store := ideastore.NewSQLStore(appCtx.GetDatabase())
+		viewStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewFindIdeaBiz(store, viewStore, appCtx.GetPubSub())
+
+		result, err := biz.FindIdeaBiz(c.Request.Context(), ideaId, userId)
 		if err != nil {
 			panic(err)
 		}
@@ -36,10 +40,13 @@ func FindIdeaForStaff(appCtx component.AppContext) gin.HandlerFunc {
 			panic(common.ErrParseJson(err))
 		}
 
-		store := ideastore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewFindIdeaBiz(store)
+		userId := c.MustGet(common.KeyUserHeader).(int)
 
-		result, err := biz.FindIdeaBizForStaff(c.Request.Context(), ideaId)
+		store := ideastore.NewSQLStore(appCtx.GetDatabase())
+		viewStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewFindIdeaBiz(store, viewStore, appCtx.GetPubSub())
+
+		result, err := biz.FindIdeaBizForStaff(c.Request.Context(), ideaId, userId)
 		if err != nil {
 			panic(err)
 		}

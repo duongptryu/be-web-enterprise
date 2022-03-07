@@ -19,7 +19,7 @@ func DeleteUserLikeIdea(appCtx component.AppContext) func(c *gin.Context) {
 		userIdRaw := c.MustGet(common.KeyUserHeader)
 
 		store := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := idealikeviewbiz.NewDeleteIdeaBiz(store)
+		biz := idealikeviewbiz.NewDeleteIdeaBiz(store, appCtx.GetPubSub())
 
 		if err := biz.DeleteUserLikeIdea(c.Request.Context(), ideaId, userIdRaw.(int)); err != nil {
 			panic(err)
@@ -39,7 +39,7 @@ func DeleteUserDislikeIdea(appCtx component.AppContext) func(c *gin.Context) {
 		userIdRaw := c.MustGet(common.KeyUserHeader)
 
 		store := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := idealikeviewbiz.NewDeleteIdeaBiz(store)
+		biz := idealikeviewbiz.NewDeleteIdeaBiz(store, appCtx.GetPubSub())
 
 		if err := biz.DeleteUserDislikeIdea(c.Request.Context(), ideaId, userIdRaw.(int)); err != nil {
 			panic(err)

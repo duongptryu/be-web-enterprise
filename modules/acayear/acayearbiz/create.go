@@ -21,7 +21,15 @@ func (biz *createAcaYearBiz) CreateAcaYearBiz(ctx context.Context, data *acayear
 	if err := data.Validate(); err != nil {
 		return err
 	}
-	//create user in db
+
+	result, err := biz.store.FindAcaYear(ctx, map[string]interface{}{"status": true})
+	if err != nil {
+		return err
+	}
+	if result.Id != 0 {
+		return acayearmodel.ErrOverlapAcaYear
+	}
+
 	if err := biz.store.CreateAcaYear(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(acayearmodel.EntityName, err)
 	}

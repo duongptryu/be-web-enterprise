@@ -82,3 +82,4 @@ func (data *AcademicYearUpdate) Validate() error {
 }
 
 var ErrTimeOverLap = common.NewCustomError(nil, "Time overlap, please check again", "ErrTimeOverLap")
+var ErrOverlapAcaYear = common.NewFullErrorResponse(409, nil, "Please deactive all another academic year were created before create new academic year", "Please deactive all another academic year were created before create new academic year", "ErrOverlapAcaYear")

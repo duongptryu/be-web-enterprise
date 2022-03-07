@@ -9,20 +9,21 @@ import (
 )
 
 func IncreaseCommentCountIdea(ctx context.Context, appCtx component.AppContext) {
-	e, _ := appCtx.GetPubSub().Subscribe(ctx, common.TopicStaffDislikeIdea)
+	e, _ := appCtx.GetPubSub().Subscribe(ctx, common.TopicIncreaseCommentCountIdea)
 
 	ideaStore := ideastore.NewSQLStore(appCtx.GetDatabase())
 
 	go func() {
 		defer common.AppRecovery()
+		for {
+			msg := <-e
 
-		msg := <-e
+			ideaId := msg.Data().(int)
 
-		commentData := msg.Data().(CastingIdea)
-
-		err := ideaStore.IncreaseCommentCountIdea(ctx, commentData.GetIdeaId())
-		if err != nil {
-			log.Error(err)
+			err := ideaStore.IncreaseCommentCountIdea(ctx, ideaId)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 	}()
 }

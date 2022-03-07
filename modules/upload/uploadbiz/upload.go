@@ -25,7 +25,8 @@ func (biz *uploadFileBiz) UploadFileBiz(ctx context.Context, fileName string, fi
 	fileExt := filepath.Ext(fileName)
 	fileName = strings.ReplaceAll(fileName, " ", "_")
 	fileName = strings.ReplaceAll(fileName, "/", "_")
-	newFileName := fmt.Sprintf("%s-%d%s", fileName, time.Now().Nanosecond(), fileExt)
+	lastDotIndex := strings.LastIndex(fileName, ".")
+	newFileName := fmt.Sprintf("%s-%d%s", fileName[:lastDotIndex], time.Now().Nanosecond(), fileExt)
 
 	file := common.File{
 		SQLModelCreate: common.SQLModelCreate{},
@@ -37,7 +38,6 @@ func (biz *uploadFileBiz) UploadFileBiz(ctx context.Context, fileName string, fi
 	}
 
 	if err := biz.store.CreateFile(ctx, &file); err != nil {
-		//delete img on s3
 		return nil, uploadmodel.ErrCannotSaveFile(err)
 	}
 

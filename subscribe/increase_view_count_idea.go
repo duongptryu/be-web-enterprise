@@ -9,20 +9,21 @@ import (
 )
 
 func IncreaseViewCountIdea(ctx context.Context, appCtx component.AppContext) {
-	e, _ := appCtx.GetPubSub().Subscribe(ctx, common.TopicUserViewIdea)
+	e, _ := appCtx.GetPubSub().Subscribe(ctx, common.TopicIncreaseViewCountIdea)
 
 	ideaStore := ideastore.NewSQLStore(appCtx.GetDatabase())
 
 	go func() {
 		defer common.AppRecovery()
+		for {
+			msg := <-e
 
-		msg := <-e
+			ideaId := msg.Data().(int)
 
-		viewData := msg.Data().(CastingIdea)
-
-		err := ideaStore.IncreaseViewCountIdea(ctx, viewData.GetIdeaId())
-		if err != nil {
-			log.Error(err)
+			err := ideaStore.IncreaseViewCountIdea(ctx, ideaId)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 	}()
 }

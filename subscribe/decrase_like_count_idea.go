@@ -9,20 +9,21 @@ import (
 )
 
 func DecreaseLikeCountIdea(ctx context.Context, appCtx component.AppContext) {
-	e, _ := appCtx.GetPubSub().Subscribe(ctx, common.TopicStaffDislikeIdea)
+	e, _ := appCtx.GetPubSub().Subscribe(ctx, common.TopicDecreaseLikeCountIdea)
 
 	ideaStore := ideastore.NewSQLStore(appCtx.GetDatabase())
 
 	go func() {
 		defer common.AppRecovery()
+		for {
+			msg := <-e
 
-		msg := <-e
+			ideaId := msg.Data().(int)
 
-		ideaId := msg.Data().(int)
-
-		err := ideaStore.DecreaseLikeCountIdea(ctx, ideaId)
-		if err != nil {
-			log.Error(err)
+			err := ideaStore.DecreaseLikeCountIdea(ctx, ideaId)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 	}()
 }

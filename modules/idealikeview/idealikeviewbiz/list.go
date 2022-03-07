@@ -18,7 +18,7 @@ func NewListUserLikeViewIdeaBiz(store idealikeviewstore.UserLikeViewIdeaStore) *
 }
 
 func (biz *listUserLikeViewIdeaBiz) ListUserLikeIdea(ctx context.Context, paging *common.Paging, filter *idealikeviewmodel.Filter) ([]idealikeviewmodel.UserLikeIdea, error) {
-	result, err := biz.store.ListUserLikeIdea(ctx, nil, filter, paging)
+	result, err := biz.store.ListUserLikeIdea(ctx, nil, filter, paging, "User")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(idealikeviewmodel.EntityName, err)
 	}
@@ -27,7 +27,7 @@ func (biz *listUserLikeViewIdeaBiz) ListUserLikeIdea(ctx context.Context, paging
 }
 
 func (biz *listUserLikeViewIdeaBiz) ListUserDislikeIdea(ctx context.Context, paging *common.Paging, filter *idealikeviewmodel.Filter) ([]idealikeviewmodel.UserDislikeIdea, error) {
-	result, err := biz.store.ListUserDislikeIdea(ctx, nil, filter, paging)
+	result, err := biz.store.ListUserDislikeIdea(ctx, nil, filter, paging, "User")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(idealikeviewmodel.EntityName, err)
 	}
@@ -36,7 +36,7 @@ func (biz *listUserLikeViewIdeaBiz) ListUserDislikeIdea(ctx context.Context, pag
 }
 
 func (biz *listUserLikeViewIdeaBiz) ListUserViewIdea(ctx context.Context, paging *common.Paging, filter *idealikeviewmodel.Filter) ([]idealikeviewmodel.UserViewIdea, error) {
-	result, err := biz.store.ListUserViewIdea(ctx, nil, filter, paging)
+	result, err := biz.store.ListUserViewIdea(ctx, nil, filter, paging, "User")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(idealikeviewmodel.EntityName, err)
 	}

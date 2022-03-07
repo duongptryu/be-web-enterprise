@@ -59,7 +59,7 @@ type IdeaUpdate struct {
 	common.SQLModelUpdate
 	Title   string        `json:"title" gorm:"column:title"`
 	Content string        `json:"content" gorm:"column:content"`
-	Status  bool          `json:"-" gorm:"column:status"`
+	Status  *bool         `json:"-" gorm:"column:status"`
 	Files   *common.Files `json:"files" gorm:"column:files"`
 }
 
@@ -68,3 +68,5 @@ func (IdeaUpdate) TableName() string {
 }
 
 var ErrAcademicYearNotReady = common.NewFullErrorResponse(409, nil, "Academic year not ready for now, please try again in later", "Academic year not ready for now, please try again in later", "ErrAcademicYearNotReady")
+var ErrFirstClosureDateExpired = common.NewFullErrorResponse(409, nil, "Time to submit new idea is expire, please contact your admin to get support", "Time to submit new idea is expire, please contact your admin to get support", "ErrFirstClosureDateExpired")
+var ErrFinalClosureDateExpired = common.NewFullErrorResponse(409, nil, "Time to submit new comment is expire, please contact your admin to get support", "Time to submit new comment is expire, please contact your admin to get support", "ErrFinalClosureDateExpired")

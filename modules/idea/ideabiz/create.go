@@ -2,6 +2,7 @@ package ideabiz
 
 import (
 	"context"
+	"time"
 	"web/common"
 	"web/modules/acayear/acayearstore"
 	"web/modules/category/categorymodel"
@@ -37,8 +38,13 @@ func (biz *createIdeaBiz) CreateIdeaBiz(ctx context.Context, data *ideamodel.Ide
 	if err != nil {
 		return err
 	}
-	if acaExist.Id == 0 || acaExist.Status == false {
+	if acaExist.Id == 0 {
 		return ideamodel.ErrAcademicYearNotReady
+	}
+
+	timeNow := time.Now()
+	if timeNow.After(acaExist.FirstClosureDate) {
+		return ideamodel.ErrFirstClosureDateExpired
 	}
 
 	data.AcaYearId = acaExist.Id

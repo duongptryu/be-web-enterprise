@@ -6,8 +6,9 @@ const EntityName = "UserLikeIdea"
 
 type UserLikeIdea struct {
 	common.SQLModelCreateNoId
-	UserId int `json:"userId" gorm:"column:user_id"`
-	IdeaId int `json:"idea_id" gorm:"column:idea_id"`
+	UserId int                `json:"userId" gorm:"column:user_id"`
+	User   *common.SimpleUser `json:"user" gorm:"preload:false"`
+	IdeaId int                `json:"idea_id" gorm:"column:idea_id"`
 }
 
 func (UserLikeIdea) TableName() string {
@@ -16,8 +17,9 @@ func (UserLikeIdea) TableName() string {
 
 type UserDislikeIdea struct {
 	common.SQLModelCreateNoId
-	UserId int `json:"userId" gorm:"column:user_id"`
-	IdeaId int `json:"idea_id" gorm:"column:idea_id"`
+	UserId int                `json:"userId" gorm:"column:user_id"`
+	User   *common.SimpleUser `json:"user" gorm:"preload:false"`
+	IdeaId int                `json:"idea_id" gorm:"column:idea_id"`
 }
 
 func (UserDislikeIdea) TableName() string {
@@ -26,8 +28,9 @@ func (UserDislikeIdea) TableName() string {
 
 type UserViewIdea struct {
 	common.SQLModelCreateNoId
-	UserId int `json:"userId" gorm:"column:user_id"`
-	IdeaId int `json:"idea_id" gorm:"column:idea_id"`
+	UserId int                `json:"userId" gorm:"column:user_id"`
+	User   *common.SimpleUser `json:"user" gorm:"preload:false"`
+	IdeaId int                `json:"idea_id" gorm:"column:idea_id"`
 }
 
 func (UserViewIdea) TableName() string {

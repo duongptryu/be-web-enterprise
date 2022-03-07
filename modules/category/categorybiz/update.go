@@ -17,8 +17,8 @@ func NewUpdateCategoryBiz(store categorystore.CategoryStore) *updateCategoryBiz 
 	}
 }
 
-func (biz *updateCategoryBiz) UpdateCategoryBiz(ctx context.Context, acaYearId int, data *categorymodel.CategoryUpdate) error {
-	cateDB, err := biz.store.FindCategory(ctx, map[string]interface{}{"id": acaYearId})
+func (biz *updateCategoryBiz) UpdateCategoryBiz(ctx context.Context, cateId int, data *categorymodel.CategoryUpdate) error {
+	cateDB, err := biz.store.FindCategory(ctx, map[string]interface{}{"id": cateId})
 	if err != nil {
 		return common.ErrCannotUpdateEntity(categorymodel.EntityName, err)
 	}
@@ -27,7 +27,7 @@ func (biz *updateCategoryBiz) UpdateCategoryBiz(ctx context.Context, acaYearId i
 	}
 
 	//create user in db
-	if err := biz.store.UpdateCategory(ctx, acaYearId, data); err != nil {
+	if err := biz.store.UpdateCategory(ctx, cateId, data); err != nil {
 		return common.ErrCannotUpdateEntity(categorymodel.EntityName, err)
 	}
 

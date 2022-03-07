@@ -46,6 +46,28 @@ func RequireAuth(appCtx component.AppContext) func(c *gin.Context) {
 	}
 }
 
+func RequireAdvAuth(appCtx component.AppContext) func(c *gin.Context) {
+	tokenProvider := appCtx.GetTokenProvider()
+	return func(c *gin.Context) {
+		token, err := extracTokenFromHeaderString(c.GetHeader("Authorization"))
+		if err != nil {
+			panic(err)
+		}
+
+		payload, err := tokenProvider.Validate(token)
+		if err != nil {
+			panic(err)
+		}
+
+		if payload.Role == common.RoleStaff {
+			panic(common.ErrPermissionDenied)
+		}
+
+		c.Set(common.KeyUserHeader, payload.UserId)
+		c.Next()
+	}
+}
+
 func RequireAdminAuth(appCtx component.AppContext) func(c *gin.Context) {
 	tokenProvider := appCtx.GetTokenProvider()
 	return func(c *gin.Context) {
@@ -60,7 +82,7 @@ func RequireAdminAuth(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		if payload.Role != common.RoleAdmin {
-			panic(ErrInvalidToken)
+			panic(common.ErrPermissionDenied)
 		}
 
 		c.Set(common.KeyUserHeader, payload.UserId)
@@ -82,7 +104,7 @@ func RequireQAMAuth(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		if payload.Role != common.RoleQAManager {
-			panic(ErrInvalidToken)
+			panic(common.ErrPermissionDenied)
 		}
 
 		c.Set(common.KeyUserHeader, payload.UserId)

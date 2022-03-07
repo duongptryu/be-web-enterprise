@@ -9,11 +9,13 @@ import (
 )
 
 type AppConfig struct {
-	Server   Server   `yaml:"server"`
-	Database Database `yaml:"database"`
-	Sms      Sms      `yaml:"sms"`
-	Token    string   `yaml:"token"`
-	S3AWS    S3AWS    `yaml:"s3_aws"`
+	Server            Server   `yaml:"server"`
+	Database          Database `yaml:"database"`
+	Sms               Sms      `yaml:"sms"`
+	Token             string   `yaml:"token"`
+	S3AWS             S3AWS    `yaml:"s3_aws"`
+	SendgridSecretKey string   `yaml:"sendgrid_secret_key"`
+	Smtp              Smtp     `yaml:"smtp"`
 }
 
 type Database struct {
@@ -43,6 +45,11 @@ type S3AWS struct {
 	ApiKey     string `yaml:"api_key"`
 	Secret     string `yaml:"secret"`
 	Domain     string `yaml:"domain"`
+}
+
+type Smtp struct {
+	Email    string `yaml:"email"`
+	Password string `yaml:"password"`
 }
 
 func NewAppConfig(configPath string) (*AppConfig, error) {

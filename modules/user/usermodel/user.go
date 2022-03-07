@@ -34,7 +34,7 @@ type UserCreate struct {
 	Department  string    `json:"department" gorm:"department" binding:"required"`
 	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth" binding:"required"`
 	Role        string    `json:"role" gorm:"role" binding:"required"`
-	Status      bool      `json:"status" gorm:"status"`
+	Status      *bool     `json:"status" gorm:"status"`
 }
 
 func (UserCreate) TableName() string {
