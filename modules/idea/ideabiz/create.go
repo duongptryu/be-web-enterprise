@@ -2,26 +2,37 @@ package ideabiz
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"time"
 	"web/common"
+	"web/components/mailprovider"
 	"web/modules/acayear/acayearstore"
 	"web/modules/category/categorymodel"
 	"web/modules/category/categorystore"
+	"web/modules/department/departmentstore"
 	"web/modules/idea/ideamodel"
 	"web/modules/idea/ideastore"
+	"web/modules/user/usermodel"
+	"web/modules/user/userstore"
 )
 
 type createIdeaBiz struct {
-	store         ideastore.IdeaStore
-	categoryStore categorystore.CategoryStore
-	acaYearStore  acayearstore.AcademicYearStore
+	store           ideastore.IdeaStore
+	categoryStore   categorystore.CategoryStore
+	acaYearStore    acayearstore.AcademicYearStore
+	userStore       userstore.UserStore
+	departmentStore departmentstore.DepartmentStore
+	mailProvider    mailprovider.MailProvider
 }
 
-func NewCreateIdeaBiz(store ideastore.IdeaStore, categoryStore categorystore.CategoryStore, acaYearStore acayearstore.AcademicYearStore) *createIdeaBiz {
+func NewCreateIdeaBiz(store ideastore.IdeaStore, categoryStore categorystore.CategoryStore, acaYearStore acayearstore.AcademicYearStore, userStore userstore.UserStore, departmentStore departmentstore.DepartmentStore, mailProvider mailprovider.MailProvider) *createIdeaBiz {
 	return &createIdeaBiz{
-		store:         store,
-		categoryStore: categoryStore,
-		acaYearStore:  acaYearStore,
+		store:           store,
+		categoryStore:   categoryStore,
+		acaYearStore:    acaYearStore,
+		userStore:       userStore,
+		departmentStore: departmentStore,
+		mailProvider:    mailProvider,
 	}
 }
 
@@ -47,11 +58,53 @@ func (biz *createIdeaBiz) CreateIdeaBiz(ctx context.Context, data *ideamodel.Ide
 		return ideamodel.ErrFirstClosureDateExpired
 	}
 
+	owner, err := biz.userStore.FindUser(ctx, map[string]interface{}{"id": data.UserId})
+	if err != nil {
+		return err
+	}
+	if owner.Id == 0 {
+		return common.ErrDataNotFound(usermodel.EntityName)
+	}
+
+	data.DepartmentId = owner.DepartmentId
 	data.AcaYearId = acaExist.Id
 	data.Status = true
 	if err := biz.store.CreateIdea(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(categorymodel.EntityName, err)
 	}
 
+	//push noti email for QAC of this department
+	go biz.pushNotiEmailForQAC(ctx, data, owner)
 	return nil
+}
+
+func (biz *createIdeaBiz) pushNotiEmailForQAC(ctx context.Context, data *ideamodel.IdeaCreate, user *usermodel.User) {
+	departmentDb, err := biz.departmentStore.FindDepartment(ctx, map[string]interface{}{"id": data.DepartmentId})
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if departmentDb.Id == 0 {
+		log.Error("Department not found with id - ", data.DepartmentId)
+		return
+	}
+
+	ownerDepartment, err := biz.userStore.FindUser(ctx, map[string]interface{}{"id": departmentDb.LeaderId})
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if ownerDepartment.Id == 0 {
+		log.Error("Owner Department Not Found - ", departmentDb.LeaderId)
+		return
+	}
+
+	go biz.mailProvider.SendMailNotifyNewIdea(ctx, &mailprovider.MailDataForIdea{
+		Email:         ownerDepartment.Email,
+		Name:          ownerDepartment.FullName,
+		NameUserPush:  user.FullName,
+		EmailUserPush: user.Email,
+		Title:         data.Title,
+		CreatedAt:     data.CreatedAt,
+	})
 }

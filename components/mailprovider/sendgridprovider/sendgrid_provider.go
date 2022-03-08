@@ -19,12 +19,29 @@ func NewSendGridProvider(secretKey string) *sendgridProvider {
 	}
 }
 
-func (p *sendgridProvider) SendMailNotifyNewComment(ctx context.Context, data *mailprovider.MailData) {
+func (p *sendgridProvider) SendMailNotifyNewComment(ctx context.Context, data *mailprovider.MailDataForComment) {
 	from := mail.NewEmail("Web Enterprise", "duongpt2503@gmail.com")
 	subject := "You got a new comment in your post idea!!"
 	to := mail.NewEmail(data.Name, data.Email)
 	plainTextContent := data.Content
 	htmlContent := fmt.Sprintf("<strong>%s</strong>", data.Content)
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	response, err := p.client.Send(message)
+	if err != nil {
+		log.Error(err)
+	} else {
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
+	}
+}
+
+func (p *sendgridProvider) SendMailNotifyNewIdea(ctx context.Context, data *mailprovider.MailDataForIdea) {
+	from := mail.NewEmail("Web Enterprise", "duongpt2503@gmail.com")
+	subject := "Staff of your department just push new idea!!"
+	to := mail.NewEmail(data.Name, data.Email)
+	plainTextContent := data.Title
+	htmlContent := fmt.Sprintf("<strong>%s</strong>", data.Title)
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 	response, err := p.client.Send(message)
 	if err != nil {

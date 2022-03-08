@@ -24,6 +24,7 @@ type Idea struct {
 	Files         *common.Files           `json:"files" gorm:"column:files"`
 	IsAnonymous   bool                    `json:"is_anonymous" gorm:"column:is_anonymous"`
 	IsExpire      bool                    `json:"is_expire" gorm:"is_expire"`
+	DepartmentId  int                     `json:"department_id" gorm:"column:department_id"`
 }
 
 func (Idea) TableName() string {
@@ -49,6 +50,7 @@ type IdeaCreate struct {
 	Files         *common.Files `json:"files" gorm:"column:files"`
 	IsAnonymous   bool          `json:"is_anonymous" gorm:"column:is_anonymous"`
 	IsExpire      bool          `json:"-" gorm:"is_expire"`
+	DepartmentId  int           `json:"-" gorm:"column:department_id"`
 }
 
 func (IdeaCreate) TableName() string {

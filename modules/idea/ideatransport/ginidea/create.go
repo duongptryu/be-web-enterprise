@@ -6,9 +6,11 @@ import (
 	component "web/components"
 	"web/modules/acayear/acayearstore"
 	"web/modules/category/categorystore"
+	"web/modules/department/departmentstore"
 	"web/modules/idea/ideabiz"
 	"web/modules/idea/ideamodel"
 	"web/modules/idea/ideastore"
+	"web/modules/user/userstore"
 )
 
 func CreateIdea(appCtx component.AppContext) func(c *gin.Context) {
@@ -23,9 +25,11 @@ func CreateIdea(appCtx component.AppContext) func(c *gin.Context) {
 
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())
 		categoryStore := categorystore.NewSQLStore(appCtx.GetDatabase())
+		userStore := userstore.NewSQLStore(appCtx.GetDatabase())
 		acaYearStore := acayearstore.NewSQLStore(appCtx.GetDatabase())
+		departmentStore := departmentstore.NewSQLStore(appCtx.GetDatabase())
 
-		biz := ideabiz.NewCreateIdeaBiz(store, categoryStore, acaYearStore)
+		biz := ideabiz.NewCreateIdeaBiz(store, categoryStore, acaYearStore, userStore, departmentStore, appCtx.GetMailProvider())
 
 		if err := biz.CreateIdeaBiz(c.Request.Context(), &data); err != nil {
 			panic(err)
