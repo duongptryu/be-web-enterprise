@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"web/common"
 	component "web/components"
+	"web/modules/department/departmentstore"
 	"web/modules/user/userbiz"
 	"web/modules/user/usermodel"
 	"web/modules/user/userstore"
@@ -18,7 +19,8 @@ func CreateUser(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		userRegisterStore := userstore.NewSQLStore(appCtx.GetDatabase())
-		userRegisterBiz := userbiz.NewCreateUserBiz(userRegisterStore)
+		departmentStore := departmentstore.NewSQLStore(appCtx.GetDatabase())
+		userRegisterBiz := userbiz.NewCreateUserBiz(userRegisterStore, departmentStore)
 
 		if err := userRegisterBiz.CreateUserBiz(c.Request.Context(), &data); err != nil {
 			panic(err)

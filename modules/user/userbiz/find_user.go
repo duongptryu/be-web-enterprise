@@ -18,7 +18,7 @@ func NewFindUserBiz(store userstore.UserStore) *findUserBiz {
 }
 
 func (biz *findUserBiz) FindUserBiz(ctx context.Context, userId int) (*usermodel.User, error) {
-	result, err := biz.store.FindUser(ctx, map[string]interface{}{"id": userId})
+	result, err := biz.store.FindUser(ctx, map[string]interface{}{"id": userId}, "Department")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(usermodel.EntityName, err)
 	}

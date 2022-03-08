@@ -88,17 +88,15 @@ func InitAdminAccount(appCtx component.AppContext) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	status := true
 	if userDB.Id == 0 {
 		adminAccount := usermodel.UserCreate{
 			Email:       "admin@gmail.com",
-			Password:    "123456789",
+			Password:    "123123",
 			FullName:    "administrator",
 			Gender:      "Male",
-			Department:  "ADMIN",
 			Role:        common.RoleAdmin,
 			DateOfBirth: time.Now(),
-			Status:      &status,
+			Status:      true,
 		}
 
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(adminAccount.Password), bcrypt.DefaultCost)

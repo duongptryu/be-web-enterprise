@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"web/common"
 	component "web/components"
+	"web/modules/department/departmentstore"
 	"web/modules/user/userbiz"
 	"web/modules/user/usermodel"
 	"web/modules/user/userstore"
@@ -24,7 +25,8 @@ func UpdateUser(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		userStore := userstore.NewSQLStore(appCtx.GetDatabase())
-		userUpdateBiz := userbiz.NewUpdateUserBiz(userStore)
+		departmentStore := departmentstore.NewSQLStore(appCtx.GetDatabase())
+		userUpdateBiz := userbiz.NewUpdateUserBiz(userStore, departmentStore)
 
 		if err := userUpdateBiz.UpdateUserBiz(c.Request.Context(), userId, &data); err != nil {
 			panic(err)

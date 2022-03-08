@@ -4,17 +4,21 @@ import (
 	"context"
 	"golang.org/x/crypto/bcrypt"
 	"web/common"
+	"web/modules/department/departmentmodel"
+	"web/modules/department/departmentstore"
 	"web/modules/user/usermodel"
 	"web/modules/user/userstore"
 )
 
 type createUserBiz struct {
-	store userstore.UserStore
+	store           userstore.UserStore
+	departmentStore departmentstore.DepartmentStore
 }
 
-func NewCreateUserBiz(store userstore.UserStore) *createUserBiz {
+func NewCreateUserBiz(store userstore.UserStore, departmentStore departmentstore.DepartmentStore) *createUserBiz {
 	return &createUserBiz{
-		store: store,
+		store:           store,
+		departmentStore: departmentStore,
 	}
 }
 
@@ -29,6 +33,18 @@ func (biz *createUserBiz) CreateUserBiz(ctx context.Context, data *usermodel.Use
 	}
 	if userDB.Id != 0 {
 		return usermodel.ErrEmailAlreadyExist
+	}
+
+	if data.Role == common.RoleStaff {
+		departmentExist, err := biz.departmentStore.FindDepartment(ctx, map[string]interface{}{"id": data.DepartmentId})
+		if err != nil {
+			return err
+		}
+		if departmentExist.Id == 0 {
+			return common.ErrDataNotFound(departmentmodel.EntityName)
+		}
+	} else {
+		data.DepartmentId = 0
 	}
 
 	//hash password

@@ -6,6 +6,7 @@ import (
 	"web/modules/acayear/acayeartransport/ginacayear"
 	"web/modules/category/categorytransport/gincategory"
 	"web/modules/comment/commenttransport/gincomment"
+	"web/modules/department/departmenttransport/gindepartment"
 	"web/modules/idea/ideatransport/ginidea"
 	"web/modules/idealikeview/idealikeviewtransport/ginuserlikeviewidea"
 	"web/modules/replycomment/replytransport/ginreply"
@@ -48,6 +49,12 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 				user.PUT("/:user_id", ginuser.UpdateUser(appCtx))
 				user.DELETE("/:user_id", ginuser.SoftDeleteUser(appCtx))
 			}
+
+			department := admin.Group("/department")
+			{
+				department.POST("", gindepartment.CreateDepartment(appCtx))
+				department.PUT("/:department_id", gindepartment.UpdateDepartment(appCtx))
+			}
 		}
 
 		QAM := v1.Group("/qam", middleware.RequireQAMAuth(appCtx))
@@ -80,6 +87,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
 
 		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
+
+		v1.GET("/department", gindepartment.ListDepartment(appCtx))
 
 		idea := v1.Group("/idea")
 		{

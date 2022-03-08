@@ -3,17 +3,21 @@ package userbiz
 import (
 	"context"
 	"web/common"
+	"web/modules/department/departmentmodel"
+	"web/modules/department/departmentstore"
 	"web/modules/user/usermodel"
 	"web/modules/user/userstore"
 )
 
 type updateUserBiz struct {
-	store userstore.UserStore
+	store           userstore.UserStore
+	departmentStore departmentstore.DepartmentStore
 }
 
-func NewUpdateUserBiz(store userstore.UserStore) *updateUserBiz {
+func NewUpdateUserBiz(store userstore.UserStore, departmentStore departmentstore.DepartmentStore) *updateUserBiz {
 	return &updateUserBiz{
-		store: store,
+		store:           store,
+		departmentStore: departmentStore,
 	}
 }
 
@@ -28,6 +32,18 @@ func (biz *updateUserBiz) UpdateUserBiz(ctx context.Context, userId int, data *u
 	}
 	if userDB.Id == 0 {
 		return common.ErrDataNotFound(usermodel.EntityName)
+	}
+
+	if data.Role == common.RoleStaff {
+		departmentExist, err := biz.departmentStore.FindDepartment(ctx, map[string]interface{}{"id": data.DepartmentId})
+		if err != nil {
+			return err
+		}
+		if departmentExist.Id == 0 {
+			return common.ErrDataNotFound(departmentmodel.EntityName)
+		}
+	} else {
+		data.DepartmentId = 0
 	}
 
 	//create user in db
