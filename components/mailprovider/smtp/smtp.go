@@ -20,7 +20,7 @@ func NewSmtpProvider(from, password string) *smtp {
 	}
 }
 
-func (p *smtp) SendMailNotifyNewComment(ctx context.Context, data *mailprovider.MailData) {
+func (p *smtp) SendMailNotifyNewComment(ctx context.Context, data *mailprovider.MailDataForComment) {
 	m := gomail.NewMessage()
 
 	// Set E-Mail sender

@@ -51,9 +51,8 @@ func ListIdeaForStaff(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		var paging common.Paging
-		query := c.Query("query")
-		if err := paging.ParsePaging(query); err != nil {
-			panic(err)
+		if err := c.ShouldBind(&paging); err != nil {
+			panic(common.ErrParseJson(err))
 		}
 		paging.Fulfill()
 
@@ -83,9 +82,8 @@ func ListAllIdeaOwner(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		var paging common.Paging
-		query := c.Query("query")
-		if err := paging.ParsePaging(query); err != nil {
-			panic(err)
+		if err := c.ShouldBind(&paging); err != nil {
+			panic(common.ErrParseJson(err))
 		}
 		paging.Fulfill()
 
