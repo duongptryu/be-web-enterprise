@@ -55,6 +55,7 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 
 			department := admin.Group("/department")
 			{
+				department.GET("", gindepartment.ListDepartment(appCtx))
 				department.POST("", gindepartment.CreateDepartment(appCtx))
 				department.PUT("/:department_id", gindepartment.UpdateDepartment(appCtx))
 			}

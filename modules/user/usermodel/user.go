@@ -15,8 +15,8 @@ type User struct {
 	Email        string                   `json:"email" gorm:"email"`
 	Password     string                   `json:"-" gorm:"password"`
 	Gender       string                   `json:"gender" gorm:"gender"`
-	DepartmentId int                      `json:"department_id,omitempty" gorm:"department_id"`
-	Department   *common.SimpleDepartment `json:"department,omitempty" gorm:"preload:false"`
+	DepartmentId int                      `json:"department_id" gorm:"department_id"`
+	Department   *common.SimpleDepartment `json:"department" gorm:"preload:false"`
 	DateOfBirth  time.Time                `json:"date_of_birth" gorm:"date_of_birth"`
 	Role         string                   `json:"role" gorm:"role"`
 	Status       bool                     `json:"status" gorm:"status"`
