@@ -21,7 +21,7 @@ func ExportIdeaToCsv(appCtx component.AppContext) func(c *gin.Context) {
 			panic(common.ErrParseJson(err))
 		}
 
-		var data exportmodel.Export
+		var data exportmodel.ExportIdea
 		data.AcaYearId = acaYearId
 
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())

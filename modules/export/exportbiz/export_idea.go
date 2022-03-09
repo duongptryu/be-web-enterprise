@@ -24,7 +24,7 @@ func NewExportIdeaBiz(ideaStore ideastore.IdeaStore, acaYearStore acayearstore.A
 	}
 }
 
-func (biz *exportIdeaBiz) ExportIdeaBiz(ctx context.Context, data *exportmodel.Export) (*bytes.Buffer, error) {
+func (biz *exportIdeaBiz) ExportIdeaBiz(ctx context.Context, data *exportmodel.ExportIdea) (*bytes.Buffer, error) {
 	acaYearExist, err := biz.acaYearStore.FindAcaYear(ctx, map[string]interface{}{"id": data.AcaYearId})
 	if err != nil {
 		return nil, err
