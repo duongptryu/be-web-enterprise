@@ -31,4 +31,8 @@ type IdeaStore interface {
 		moreKey ...string,
 	) ([]ideamodel.Idea, error)
 	UpdateIdea(ctx context.Context, id int, data *ideamodel.IdeaUpdate) error
+	ListALlIdea(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) ([]ideamodel.Idea, error)
 }

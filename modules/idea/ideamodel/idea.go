@@ -9,22 +9,23 @@ const EntityName = "Idea"
 
 type Idea struct {
 	common.SQLModel
-	Title         string                  `json:"title" gorm:"column:title"`
-	Content       string                  `json:"content" gorm:"column:content"`
-	UserId        int                     `json:"user_id" gorm:"column:user_id"`
-	User          *common.SimpleUser      `json:"user,omitempty" gorm:"preload:false"`
-	CategoryId    int                     `json:"category_id" gorm:"column:category_id"`
-	Category      *categorymodel.Category `json:"category,omitempty" gorm:"preload:false"`
-	AcaYearId     int                     `json:"aca_year_id" gorm:"column:aca_year_id"`
-	LikesCount    int                     `json:"likes_count" gorm:"column:likes_count"`
-	DislikesCount int                     `json:"dislikes_count" gorm:"column:dislikes_count"`
-	ViewsCount    int                     `json:"views_count" gorm:"column:views_count"`
-	CommentsCount int                     `json:"comments_count" gorm:"column:comments_count"`
-	Status        bool                    `json:"status" gorm:"column:status"`
-	Files         *common.Files           `json:"files" gorm:"column:files"`
-	IsAnonymous   bool                    `json:"is_anonymous" gorm:"column:is_anonymous"`
-	IsExpire      bool                    `json:"is_expire" gorm:"is_expire"`
-	DepartmentId  int                     `json:"department_id" gorm:"column:department_id"`
+	Title         string                   `json:"title" gorm:"column:title"`
+	Content       string                   `json:"content" gorm:"column:content"`
+	UserId        int                      `json:"user_id" gorm:"column:user_id"`
+	User          *common.SimpleUser       `json:"user,omitempty" gorm:"preload:false"`
+	CategoryId    int                      `json:"category_id" gorm:"column:category_id"`
+	Category      *categorymodel.Category  `json:"category,omitempty" gorm:"preload:false"`
+	AcaYearId     int                      `json:"aca_year_id" gorm:"column:aca_year_id"`
+	LikesCount    int                      `json:"likes_count" gorm:"column:likes_count"`
+	DislikesCount int                      `json:"dislikes_count" gorm:"column:dislikes_count"`
+	ViewsCount    int                      `json:"views_count" gorm:"column:views_count"`
+	CommentsCount int                      `json:"comments_count" gorm:"column:comments_count"`
+	Status        bool                     `json:"status" gorm:"column:status"`
+	Files         *common.Files            `json:"files" gorm:"column:files"`
+	IsAnonymous   bool                     `json:"is_anonymous" gorm:"column:is_anonymous"`
+	IsExpire      bool                     `json:"is_expire" gorm:"is_expire"`
+	DepartmentId  int                      `json:"department_id" gorm:"column:department_id"`
+	Department    *common.SimpleDepartment `json:"department,omitempty" gorm:"preload:false"`
 }
 
 func (Idea) TableName() string {

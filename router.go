@@ -7,6 +7,7 @@ import (
 	"web/modules/category/categorytransport/gincategory"
 	"web/modules/comment/commenttransport/gincomment"
 	"web/modules/department/departmenttransport/gindepartment"
+	"web/modules/export/exporttransport/ginexport"
 	"web/modules/idea/ideatransport/ginidea"
 	"web/modules/idealikeview/idealikeviewtransport/ginuserlikeviewidea"
 	"web/modules/replycomment/replytransport/ginreply"
@@ -26,6 +27,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/login", ginuser.UserLogin(appCtx))
+
+		v1.GET("/export-csv", ginexport.ExportIdeaToCsv(appCtx))
 
 		role := v1.Group("/role")
 		{

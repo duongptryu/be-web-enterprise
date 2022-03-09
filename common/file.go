@@ -9,10 +9,10 @@ import (
 
 type File struct {
 	SQLModelCreate
-	Url        string  `json:"url" gorm:"column:url;"`
-	Name       string  `json:"name" gorm:"column:name"`
-	NameOrigin string  `json:"name_origin" gorm:"column:name_origin"`
-	Size       float64 `json:"size" gorm:"column:size"`
+	Url        string  `json:"url,omitempty" gorm:"column:url;"`
+	Name       string  `json:"name,omitempty" gorm:"column:name"`
+	NameOrigin string  `json:"name_origin,omitempty" gorm:"column:name_origin"`
+	Size       float64 `json:"size,omitempty" gorm:"column:size"`
 	Ext        string  `json:"ext,omitempty" gorm:"column:ext"`
 }
 
