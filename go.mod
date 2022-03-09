@@ -9,6 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/sendgrid/sendgrid-go v3.11.0+incompatible
 	github.com/sirupsen/logrus v1.8.1
+	github.com/xuri/excelize/v2 v2.5.0
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	gopkg.in/mail.v2 v2.3.1
 	gopkg.in/yaml.v2 v2.4.0
@@ -36,7 +37,6 @@ require (
 	github.com/sendgrid/rest v2.6.8+incompatible // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/xuri/efp v0.0.0-20210322160811-ab561f5b45e3 // indirect
-	github.com/xuri/excelize/v2 v2.5.0 // indirect
 	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f // indirect
 	golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 // indirect
 	golang.org/x/text v0.3.6 // indirect

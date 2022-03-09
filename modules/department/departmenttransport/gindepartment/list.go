@@ -40,3 +40,17 @@ func ListDepartment(appCtx component.AppContext) gin.HandlerFunc {
 		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
 	}
 }
+
+func ListDepartmentForStaff(appCtx component.AppContext) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		departmentStore := departmentstore.NewSQLStore(appCtx.GetDatabase())
+		biz := departmentbiz.NewListDepartment(departmentStore)
+
+		result, err := biz.ListDepartmentBizForStaff(c.Request.Context())
+		if err != nil {
+			panic(err)
+		}
+
+		c.JSON(http.StatusOK, common.NewSimpleSuccessResponse(result))
+	}
+}

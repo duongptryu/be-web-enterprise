@@ -58,7 +58,7 @@ type AcademicYearUpdate struct {
 	EndDate          time.Time `json:"end_date" gorm:"end_date"`
 	FirstClosureDate time.Time `json:"first_closure_date" gorm:"first_closure_date"`
 	FinalClosureDate time.Time `json:"final_closure_date" gorm:"final_closure_date"`
-	Status           bool      `json:"status" gorm:"status"`
+	Status           *bool     `json:"status" gorm:"status"`
 }
 
 func (AcademicYearUpdate) TableName() string {

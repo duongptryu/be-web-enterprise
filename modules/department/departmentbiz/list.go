@@ -18,7 +18,16 @@ func NewListDepartment(store departmentstore.DepartmentStore) *listDepartmentBiz
 }
 
 func (biz *listDepartmentBiz) ListDepartmentBiz(ctx context.Context, paging *common.Paging, filter *departmentmodel.Filter) ([]departmentmodel.Department, error) {
-	result, err := biz.store.ListDepartment(ctx, nil, filter, paging, "User")
+	result, err := biz.store.ListDepartment(ctx, nil, filter, paging, "Leader")
+	if err != nil {
+		return nil, common.ErrCannotListEntity(departmentmodel.EntityName, err)
+	}
+
+	return result, nil
+}
+
+func (biz *listDepartmentBiz) ListDepartmentBizForStaff(ctx context.Context) ([]departmentmodel.Department, error) {
+	result, err := biz.store.ListDepartmentForStaff(ctx, nil, "Leader")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(departmentmodel.EntityName, err)
 	}

@@ -19,7 +19,21 @@ func (s *sqlStore) ListUser(ctx context.Context,
 	db = db.Table(usermodel.User{}.TableName()).Where(condition)
 
 	if v := filter; v != nil {
-
+		if v.Role != "" {
+			db = db.Where("role = ?", v.Role)
+		}
+		if v.Status != "" && (v.Status == "false" || v.Status == "true") {
+			db = db.Where("status = ?", v.Status)
+		}
+		if v.DepartmentId != 0 {
+			db = db.Where("department_id = ?", v.DepartmentId)
+		}
+		if v.Email != "" {
+			db = db.Where("email LIKE ?", "%"+v.Email+"%")
+		}
+		if v.FullName != "" {
+			db = db.Where("full_name LIKE ?", "%"+v.FullName+"%")
+		}
 	}
 
 	if err := db.Count(&paging.Total).Error; err != nil {

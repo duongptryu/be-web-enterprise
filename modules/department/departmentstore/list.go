@@ -41,3 +41,26 @@ func (s *sqlStore) ListDepartment(ctx context.Context,
 	}
 	return result, nil
 }
+
+
+func (s *sqlStore) ListDepartmentForStaff(ctx context.Context,
+	condition map[string]interface{},
+	moreKey ...string,
+) ([]departmentmodel.Department, error) {
+	var result []departmentmodel.Department
+
+	db := s.db
+
+	db = db.Table(departmentmodel.Department{}.TableName()).Where(condition)
+
+	for i := range moreKey {
+		db = db.Preload(moreKey[i])
+	}
+
+
+	if err := db.Order("id desc").Find(&result).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+	return result, nil
+}
+

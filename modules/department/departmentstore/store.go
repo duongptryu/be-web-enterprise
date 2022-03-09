@@ -31,4 +31,8 @@ type DepartmentStore interface {
 	) (*departmentmodel.Department, error)
 	DeleteDepartment(ctx context.Context, id int) error
 	CreateDepartment(ctx context.Context, data *departmentmodel.DepartmentCreate) error
+	ListDepartmentForStaff(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) ([]departmentmodel.Department, error)
 }

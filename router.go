@@ -91,7 +91,7 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 
 		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
 
-		v1.GET("/department", gindepartment.ListDepartment(appCtx))
+		v1.GET("/department", gindepartment.ListDepartmentForStaff(appCtx))
 
 		idea := v1.Group("/idea")
 		{

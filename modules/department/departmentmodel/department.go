@@ -11,7 +11,7 @@ type Department struct {
 	Name     string             `json:"name" gorm:"name"`
 	Status   bool               `json:"status" gorm:"status"`
 	LeaderId int                `json:"leader_id" gorm:"leader_id"`
-	User     *common.SimpleUser `json:"leader" gorm:"foreignKey:LeaderId;preload:false"`
+	Leader     *common.SimpleUser `json:"leader" gorm:"foreignKey:LeaderId;preload:false"`
 }
 
 func (Department) TableName() string {
