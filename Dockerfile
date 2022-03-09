@@ -4,5 +4,5 @@ RUN update-ca-certificates
 
 WORKDIR /app/
 ADD ./app /app/
-ADD ./config_stg.yaml /app/config.yaml
+ADD ./config_stg.yaml /app/config.yaml 
 ENTRYPOINT ["./app"]
