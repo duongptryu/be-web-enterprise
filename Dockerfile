@@ -1,6 +1,7 @@
 FROM alpine
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 RUN update-ca-certificates
+RUN mdkir /app/assets
 
 WORKDIR /app/
 ADD ./app /app/

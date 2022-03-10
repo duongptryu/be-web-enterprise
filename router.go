@@ -30,6 +30,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 
 		v1.GET("/export-csv", ginexport.ExportIdeaToCsv(appCtx))
 
+		v1.GET("/export-docs", ginexport.ExportDocs(appCtx))
+
 		role := v1.Group("/role")
 		{
 			role.GET("", ginuser.GetListRole(appCtx))
