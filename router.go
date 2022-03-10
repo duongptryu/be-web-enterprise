@@ -19,7 +19,7 @@ import (
 
 func setupRouter(r *gin.Engine, appCtx component.AppContext) {
 	r.Use(middleware.Recover(appCtx))
-	r.Static("/assets", "/tmp")
+	r.Static("/assets", "./assets")
 	v1Route(r, appCtx)
 }
 
@@ -27,10 +27,6 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/login", ginuser.UserLogin(appCtx))
-
-		v1.GET("/export-csv", ginexport.ExportIdeaToCsv(appCtx))
-
-		v1.GET("/export-docs", ginexport.ExportDocs(appCtx))
 
 		role := v1.Group("/role")
 		{
@@ -72,6 +68,10 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 				cate.PUT("/:cate_id", gincategory.UpdateCategory(appCtx))
 				cate.DELETE("/:cate_id", gincategory.DeleteCategory(appCtx))
 			}
+
+			QAM.GET("/export-csv", ginexport.ExportIdeaToCsv(appCtx))
+
+			QAM.GET("/export-docs", ginexport.ExportDocs(appCtx))
 		}
 
 		advance := v1.Group("adv", middleware.RequireAdvAuth(appCtx))

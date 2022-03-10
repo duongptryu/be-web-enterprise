@@ -25,7 +25,7 @@ func Upload(appCtx component.AppContext) func(ctx *gin.Context) {
 		f, err := biz.UploadFileBiz(c.Request.Context(), fileHeader.Filename, fileHeader.Size)
 
 		//store image into own system
-		c.SaveUploadedFile(fileHeader, fmt.Sprintf("/tmp/%s", f.Name))
+		c.SaveUploadedFile(fileHeader, fmt.Sprintf("./assets/%s", f.Name))
 
 		if err != nil {
 			panic(err)

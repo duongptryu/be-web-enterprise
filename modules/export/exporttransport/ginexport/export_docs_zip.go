@@ -10,7 +10,7 @@ import (
 	component "web/components"
 )
 
-const Dir = "./assets/"
+const Dir = "./assets"
 
 func ExportDocs(appCtx component.AppContext) func(c *gin.Context) {
 	return func(c *gin.Context) {
