@@ -69,7 +69,7 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 				cate.DELETE("/:cate_id", gincategory.DeleteCategory(appCtx))
 			}
 
-			QAM.GET("/export-csv", ginexport.ExportIdeaToCsv(appCtx))
+			QAM.GET("/export-ideas", ginexport.ExportIdeaToCsv(appCtx))
 
 			QAM.GET("/export-docs", ginexport.ExportDocs(appCtx))
 		}
