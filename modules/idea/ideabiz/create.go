@@ -70,7 +70,7 @@ func (biz *createIdeaBiz) CreateIdeaBiz(ctx context.Context, data *ideamodel.Ide
 	data.AcaYearId = acaExist.Id
 	data.Status = true
 	if err := biz.store.CreateIdea(ctx, data); err != nil {
-		return common.ErrCannotCreateEntity(categorymodel.EntityName, err)
+		return common.ErrCannotCreateEntity(ideamodel.EntityName, err)
 	}
 
 	//push noti email for QAC of this department

@@ -3,9 +3,11 @@ package ginupload
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"path/filepath"
 	"web/common"
 	component "web/components"
 	"web/modules/upload/uploadbiz"
+	"web/modules/upload/uploadmodel"
 	"web/modules/upload/uploadstore"
 )
 
@@ -16,8 +18,8 @@ func Upload(appCtx component.AppContext) func(ctx *gin.Context) {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		if err != nil {
-			panic(common.ErrInvalidRequest(err))
+		if err := uploadmodel.ValidateFileExt(filepath.Ext(fileHeader.Filename)); err != nil {
+			panic(err)
 		}
 
 		fileStore := uploadstore.NewSQLStore(appCtx.GetDatabase())
