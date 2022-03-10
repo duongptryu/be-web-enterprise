@@ -25,9 +25,6 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 		if v.IsAnonymous != "" && (v.IsAnonymous == "false" || v.IsAnonymous == "true") {
 			db = db.Where("is_anonymous = ?", v.IsAnonymous)
 		}
-		if v.DepartmentId != 0 {
-			db = db.Where("department_id = ?", v.DepartmentId)
-		}
 		if v.Title != "" {
 			db = db.Where("title LIKE ?", "%"+v.Title+"%")
 		}
@@ -51,6 +48,15 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 		}
 		if v.ViewSt > 0 {
 			db = db.Where("views_count <= ?", v.ViewSt)
+		}
+		if v.CategoryName != "" {
+			db = db.Joins("JOIN categories on categories.id = ideas.category_id").Where("categories.name LIKE ?", "%"+v.CategoryName+"%")
+		}
+		if v.DepartmentName != "" {
+			db = db.Joins("JOIN departments on departments.id = ideas.department_id").Where("departments.name LIKE ?", "%"+v.DepartmentName+"%")
+		}
+		if v.AcaYear != "" {
+			db = db.Joins("JOIN academic_years on academic_years.id = ideas.aca_year_id").Where("academic_years.name LIKE ?", "%"+v.AcaYear+"%")
 		}
 	}
 

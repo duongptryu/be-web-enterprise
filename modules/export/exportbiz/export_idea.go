@@ -60,10 +60,9 @@ func (biz *exportIdeaBiz) ExportIdeaBiz(ctx context.Context, data *exportmodel.E
 	f.SetCellValue(nameSheet, "L1", "Comments count")
 	f.SetCellValue(nameSheet, "M1", "Status")
 	f.SetCellValue(nameSheet, "N1", "Is anonymous")
-	f.SetCellValue(nameSheet, "O1", "Is expire")
-	f.SetCellValue(nameSheet, "P1", "Files")
-	f.SetCellValue(nameSheet, "Q1", "Created At")
-	f.SetCellValue(nameSheet, "R1", "Link")
+	f.SetCellValue(nameSheet, "O1", "Files")
+	f.SetCellValue(nameSheet, "P1", "Created At")
+	f.SetCellValue(nameSheet, "Q1", "Link")
 	// Set value of a cell.
 
 	for i, v := range ideas {
@@ -84,11 +83,9 @@ func (biz *exportIdeaBiz) ExportIdeaBiz(ctx context.Context, data *exportmodel.E
 		f.SetCellValue(nameSheet, fmt.Sprintf("K%v", i+2), v.ViewsCount)
 		f.SetCellValue(nameSheet, fmt.Sprintf("L%v", i+2), v.CommentsCount)
 		f.SetCellValue(nameSheet, fmt.Sprintf("M%v", i+2), v.Status)
-		f.SetCellValue(nameSheet, fmt.Sprintf("N%v", i+2), v.IsAnonymous)
-		f.SetCellValue(nameSheet, fmt.Sprintf("O%v", i+2), v.IsExpire)
-		f.SetCellValue(nameSheet, fmt.Sprintf("P%v", i+2), files)
-		f.SetCellValue(nameSheet, fmt.Sprintf("Q%v", i+2), v.CreatedAt.Format("2006-01-02T15:04:05"))
-		f.SetCellValue(nameSheet, fmt.Sprintf("R%v", i+2), fmt.Sprintf("https://groupbar.me/ideas/%v", v.Id))
+		f.SetCellValue(nameSheet, fmt.Sprintf("O%v", i+2), files)
+		f.SetCellValue(nameSheet, fmt.Sprintf("P%v", i+2), v.CreatedAt.Format("2006-01-02T15:04:05"))
+		f.SetCellValue(nameSheet, fmt.Sprintf("Q%v", i+2), fmt.Sprintf("https://groupbar.me/ideas/%v", v.Id))
 	}
 
 	// Set active sheet of the workbook.

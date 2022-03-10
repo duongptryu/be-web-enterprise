@@ -27,7 +27,7 @@ func (biz *listIdeaBiz) ListIdeaBiz(ctx context.Context, paging *common.Paging, 
 }
 
 func (biz *listIdeaBiz) ListIdeaBizForStaff(ctx context.Context, paging *common.Paging, filter *ideamodel.Filter) ([]ideamodel.Idea, error) {
-	result, err := biz.store.ListIdea(ctx, map[string]interface{}{"status": true}, filter, paging, "User", "Category")
+	result, err := biz.store.ListIdea(ctx, map[string]interface{}{"ideas.status": true}, filter, paging, "User", "Category")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(ideamodel.EntityName, err)
 	}
@@ -36,7 +36,7 @@ func (biz *listIdeaBiz) ListIdeaBizForStaff(ctx context.Context, paging *common.
 }
 
 func (biz *listIdeaBiz) ListIdeaForOwner(ctx context.Context, userId int, paging *common.Paging, filter *ideamodel.Filter) ([]ideamodel.Idea, error) {
-	result, err := biz.store.ListIdea(ctx, map[string]interface{}{"status": true, "user_id": userId}, filter, paging, "Category")
+	result, err := biz.store.ListIdea(ctx, map[string]interface{}{"ideas.status": true, "ideas.user_id": userId}, filter, paging, "Category")
 	if err != nil {
 		return nil, common.ErrCannotListEntity(ideamodel.EntityName, err)
 	}

@@ -12,9 +12,9 @@ type Idea struct {
 	Title         string                   `json:"title" gorm:"column:title"`
 	Content       string                   `json:"content" gorm:"column:content"`
 	UserId        int                      `json:"user_id" gorm:"column:user_id"`
-	User          *common.SimpleUser       `json:"user,omitempty" gorm:"preload:false"`
+	User          *common.SimpleUser       `json:"user" gorm:"preload:false"`
 	CategoryId    int                      `json:"category_id" gorm:"column:category_id"`
-	Category      *categorymodel.Category  `json:"category,omitempty" gorm:"preload:false"`
+	Category      *categorymodel.Category  `json:"category" gorm:"preload:false"`
 	AcaYearId     int                      `json:"aca_year_id" gorm:"column:aca_year_id"`
 	LikesCount    int                      `json:"likes_count" gorm:"column:likes_count"`
 	DislikesCount int                      `json:"dislikes_count" gorm:"column:dislikes_count"`
@@ -23,9 +23,9 @@ type Idea struct {
 	Status        bool                     `json:"status" gorm:"column:status"`
 	Files         *common.Files            `json:"files" gorm:"column:files"`
 	IsAnonymous   bool                     `json:"is_anonymous" gorm:"column:is_anonymous"`
-	IsExpire      bool                     `json:"is_expire" gorm:"is_expire"`
 	DepartmentId  int                      `json:"department_id" gorm:"column:department_id"`
 	Department    *common.SimpleDepartment `json:"department,omitempty" gorm:"preload:false"`
+	ThumbnailUrl  string                   `json:"thumbnail_url" gorm:"column:thumbnail_url"`
 }
 
 func (Idea) TableName() string {
@@ -41,6 +41,7 @@ type IdeaCreate struct {
 	Title         string        `json:"title" gorm:"column:title"`
 	Content       string        `json:"content" gorm:"column:content"`
 	UserId        int           `json:"-" gorm:"column:user_id"`
+	ThumbnailUrl  string        `json:"thumbnail_url" gorm:"column:thumbnail_url"`
 	CategoryId    int           `json:"category_id" gorm:"column:category_id"`
 	AcaYearId     int           `json:"-" gorm:"column:aca_year_id"`
 	LikesCount    int           `json:"-" gorm:"column:likes_count"`
@@ -50,7 +51,6 @@ type IdeaCreate struct {
 	Status        bool          `json:"-" gorm:"column:status"`
 	Files         *common.Files `json:"files" gorm:"column:files"`
 	IsAnonymous   bool          `json:"is_anonymous" gorm:"column:is_anonymous"`
-	IsExpire      bool          `json:"-" gorm:"is_expire"`
 	DepartmentId  int           `json:"-" gorm:"column:department_id"`
 }
 
@@ -60,10 +60,11 @@ func (IdeaCreate) TableName() string {
 
 type IdeaUpdate struct {
 	common.SQLModelUpdate
-	Title   string        `json:"title" gorm:"column:title"`
-	Content string        `json:"content" gorm:"column:content"`
-	Status  *bool         `json:"-" gorm:"column:status"`
-	Files   *common.Files `json:"files" gorm:"column:files"`
+	Title        string        `json:"title" gorm:"column:title"`
+	Content      string        `json:"content" gorm:"column:content"`
+	ThumbnailUrl string        `json:"thumbnail_url" gorm:"column:thumbnail_url"`
+	Status       *bool         `json:"-" gorm:"column:status"`
+	Files        *common.Files `json:"files" gorm:"column:files"`
 }
 
 func (IdeaUpdate) TableName() string {
