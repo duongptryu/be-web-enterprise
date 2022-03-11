@@ -26,6 +26,8 @@ type Idea struct {
 	DepartmentId  int                      `json:"department_id" gorm:"column:department_id"`
 	Department    *common.SimpleDepartment `json:"department,omitempty" gorm:"preload:false"`
 	ThumbnailUrl  string                   `json:"thumbnail_url" gorm:"column:thumbnail_url"`
+	IsLike        bool                     `json:"is_like" gorm:"-"`
+	IsDislike     bool                     `json:"is_dislike" gorm:"-"`
 }
 
 func (Idea) TableName() string {

@@ -53,4 +53,13 @@ type UserLikeViewIdeaStore interface {
 		condition map[string]interface{},
 		moreKey ...string,
 	) (*idealikeviewmodel.UserDislikeIdea, error)
+
+	ListIdeaUserLike(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) (map[int]int, error)
+	ListIdeaUserDislike(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) (map[int]int, error)
 }

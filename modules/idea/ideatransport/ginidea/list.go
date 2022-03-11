@@ -8,6 +8,7 @@ import (
 	"web/modules/idea/ideabiz"
 	"web/modules/idea/ideamodel"
 	"web/modules/idea/ideastore"
+	"web/modules/idealikeview/idealikeviewstore"
 )
 
 func ListIdea(appCtx component.AppContext) gin.HandlerFunc {
@@ -24,10 +25,13 @@ func ListIdea(appCtx component.AppContext) gin.HandlerFunc {
 		}
 		paging.Fulfill()
 
-		store := ideastore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewListIdeaBiz(store)
+		userID := c.MustGet(common.KeyUserHeader).(int)
 
-		result, err := biz.ListIdeaBiz(c.Request.Context(), &paging, &filter)
+		store := ideastore.NewSQLStore(appCtx.GetDatabase())
+		likeStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewListIdeaBiz(store, likeStore)
+
+		result, err := biz.ListIdeaBiz(c.Request.Context(), userID, &paging, &filter)
 		if err != nil {
 			panic(err)
 		}
@@ -56,22 +60,15 @@ func ListIdeaForStaff(appCtx component.AppContext) gin.HandlerFunc {
 		}
 		paging.Fulfill()
 
-		store := ideastore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewListIdeaBiz(store)
+		userID := c.MustGet(common.KeyUserHeader).(int)
 
-		result, err := biz.ListIdeaBizForStaff(c.Request.Context(), &paging, &filter)
+		store := ideastore.NewSQLStore(appCtx.GetDatabase())
+		likeStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewListIdeaBiz(store, likeStore)
+
+		result, err := biz.ListIdeaBizForStaff(c.Request.Context(), userID, &paging, &filter)
 		if err != nil {
 			panic(err)
-		}
-
-		for i := range result {
-			if result[i].IsAnonymous {
-				result[i].UserId = 0
-				result[i].User = nil
-			}
-			if i == len(result)-1 {
-				paging.NextCursor = result[i].Id
-			}
 		}
 
 		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
@@ -94,17 +91,12 @@ func ListAllIdeaOwner(appCtx component.AppContext) gin.HandlerFunc {
 		userId := c.MustGet(common.KeyUserHeader).(int)
 
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewListIdeaBiz(store)
+		likeStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewListIdeaBiz(store, likeStore)
 
 		result, err := biz.ListIdeaForOwner(c.Request.Context(), userId, &paging, &filter)
 		if err != nil {
 			panic(err)
-		}
-
-		for i := range result {
-			if i == len(result)-1 {
-				paging.NextCursor = result[i].Id
-			}
 		}
 
 		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
