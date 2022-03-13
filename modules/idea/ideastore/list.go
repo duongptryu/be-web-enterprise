@@ -58,6 +58,28 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 		if v.AcaYear != "" {
 			db = db.Joins("JOIN academic_years on academic_years.id = ideas.aca_year_id").Where("academic_years.name LIKE ?", "%"+v.AcaYear+"%")
 		}
+		if v.Order != "" {
+			switch v.Order {
+			case "like_desc":
+				db = db.Order("likes_count desc")
+			case "dislike_desc":
+				db = db.Order("dislikes_count desc")
+			case "view_desc":
+				db = db.Order("views_count desc")
+			case "created_at_desc":
+				db = db.Order("created_at desc")
+			case "like_asc":
+				db = db.Order("likes_count")
+			case "dislike_asc":
+				db = db.Order("dislikes_count")
+			case "view_asc":
+				db = db.Order("views_count")
+			case "created_at_asc":
+				db = db.Order("created_at")
+			}
+		} else {
+			db = db.Order("id desc")
+		}
 	}
 
 	if err := db.Count(&paging.Total).Error; err != nil {
@@ -74,7 +96,7 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 		db = db.Offset((paging.Page - 1) * paging.Limit)
 	}
 
-	if err := db.Limit(paging.Limit).Order("id desc").Find(&result).Error; err != nil {
+	if err := db.Limit(paging.Limit).Find(&result).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 	return result, nil
