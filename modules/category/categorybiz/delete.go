@@ -5,15 +5,18 @@ import (
 	"web/common"
 	"web/modules/category/categorymodel"
 	"web/modules/category/categorystore"
+	"web/modules/idea/ideastore"
 )
 
 type deleteCategoryBiz struct {
-	store categorystore.CategoryStore
+	store     categorystore.CategoryStore
+	ideaStore ideastore.IdeaStore
 }
 
-func NewDeleteCategoryBiz(store categorystore.CategoryStore) *deleteCategoryBiz {
+func NewDeleteCategoryBiz(store categorystore.CategoryStore, ideaStore ideastore.IdeaStore) *deleteCategoryBiz {
 	return &deleteCategoryBiz{
-		store: store,
+		store:     store,
+		ideaStore: ideaStore,
 	}
 }
 
@@ -24,6 +27,15 @@ func (biz *deleteCategoryBiz) DeleteCategoryBiz(ctx context.Context, cateId int)
 	}
 	if cateDB.Id == 0 {
 		return common.ErrDataNotFound(categorymodel.EntityName)
+	}
+
+	idea, err := biz.ideaStore.FindIdea(ctx, map[string]interface{}{"category_id": cateDB.Id})
+	if err != nil {
+		return err
+	}
+
+	if idea.Id != 0 {
+		return categorymodel.ErrCannotDelCategory
 	}
 
 	//create user in db

@@ -33,3 +33,5 @@ type CategoryUpdate struct {
 func (CategoryUpdate) TableName() string {
 	return Category{}.TableName()
 }
+
+var ErrCannotDelCategory = common.NewCustomError(nil, "This category has been used, cannot delete", "ErrCannotDelCategory")

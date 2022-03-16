@@ -7,6 +7,7 @@ import (
 	component "web/components"
 	"web/modules/category/categorybiz"
 	"web/modules/category/categorystore"
+	"web/modules/idea/ideastore"
 )
 
 func DeleteCategory(appCtx component.AppContext) func(c *gin.Context) {
@@ -17,7 +18,8 @@ func DeleteCategory(appCtx component.AppContext) func(c *gin.Context) {
 		}
 
 		store := categorystore.NewSQLStore(appCtx.GetDatabase())
-		biz := categorybiz.NewDeleteCategoryBiz(store)
+		ideaStore := ideastore.NewSQLStore(appCtx.GetDatabase())
+		biz := categorybiz.NewDeleteCategoryBiz(store, ideaStore)
 
 		if err := biz.DeleteCategoryBiz(c.Request.Context(), cateId); err != nil {
 			panic(err)
