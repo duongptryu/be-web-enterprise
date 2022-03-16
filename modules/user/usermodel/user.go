@@ -74,7 +74,6 @@ type UserUpdateSelf struct {
 	Avatar      string    `json:"avatar" gorm:"avatar"`
 	Gender      string    `json:"gender" gorm:"gender"`
 	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth"`
-	Status      *bool     `json:"status" gorm:"status"`
 }
 
 func (UserUpdateSelf) TableName() string {

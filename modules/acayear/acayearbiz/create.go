@@ -27,7 +27,9 @@ func (biz *createAcaYearBiz) CreateAcaYearBiz(ctx context.Context, data *acayear
 		return err
 	}
 	if result.Id != 0 {
-		return acayearmodel.ErrOverlapAcaYear
+		if data.Status {
+			return acayearmodel.ErrOverlapAcaYear
+		}
 	}
 
 	if err := biz.store.CreateAcaYear(ctx, data); err != nil {
