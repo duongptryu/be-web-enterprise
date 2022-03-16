@@ -40,11 +40,11 @@ func (data *Idea) GetIdeaId() int {
 
 type IdeaCreate struct {
 	common.SQLModelCreate
-	Title         string        `json:"title" gorm:"column:title"`
-	Content       string        `json:"content" gorm:"column:content"`
+	Title         string        `json:"title" gorm:"column:title" binding:"required"`
+	Content       string        `json:"content" gorm:"column:content" binding:"required"`
 	UserId        int           `json:"-" gorm:"column:user_id"`
 	ThumbnailUrl  string        `json:"thumbnail_url" gorm:"column:thumbnail_url"`
-	CategoryId    int           `json:"category_id" gorm:"column:category_id"`
+	CategoryId    int           `json:"category_id" gorm:"column:category_id" binding:"required"`
 	AcaYearId     int           `json:"-" gorm:"column:aca_year_id"`
 	LikesCount    int           `json:"-" gorm:"column:likes_count"`
 	DislikesCount int           `json:"-" gorm:"column:dislikes_count"`

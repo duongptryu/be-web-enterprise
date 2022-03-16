@@ -27,7 +27,7 @@ type CommentCreate struct {
 	Id           int    `json:"-" gorm:"column:id"`
 	UserId       int    `json:"-" gorm:"column:user_id"`
 	IdeaId       int    `json:"idea_id" gorm:"column:idea_id"`
-	Content      string `json:"content" gorm:"column:content"`
+	Content      string `json:"content" gorm:"column:content" binding:"required"`
 	RepliesCount int    `json:"-" gorm:"column:replies_count"`
 	Status       bool   `json:"-" gorm:"status"`
 	IsAnonymous  bool   `json:"is_anonymous" gorm:"column:is_anonymous"`

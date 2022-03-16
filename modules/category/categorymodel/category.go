@@ -16,7 +16,7 @@ func (Category) TableName() string {
 
 type CategoryCreate struct {
 	common.SQLModelCreate
-	Name   string `json:"name" gorm:"name"`
+	Name   string `json:"name" gorm:"name" binding:"required"`
 	Status bool   `json:"status" gorm:"status"`
 }
 

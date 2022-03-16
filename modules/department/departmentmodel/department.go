@@ -20,9 +20,9 @@ func (Department) TableName() string {
 
 type DepartmentCreate struct {
 	common.SQLModelCreate
-	Name     string `json:"name" gorm:"name"`
+	Name     string `json:"name" gorm:"name" binding:"required"`
 	Status   bool   `json:"status" gorm:"status"`
-	LeaderId int    `json:"leader_id" gorm:"leader_id"`
+	LeaderId int    `json:"leader_id" gorm:"leader_id" binding:"required"`
 }
 
 func (DepartmentCreate) TableName() string {

@@ -23,11 +23,11 @@ func (AcademicYear) TableName() string {
 
 type AcademicYearCreate struct {
 	common.SQLModelCreate
-	Title            string    `json:"title" gorm:"title"`
-	StartDate        time.Time `json:"start_date" gorm:"start_date"`
-	EndDate          time.Time `json:"end_date" gorm:"end_date"`
-	FirstClosureDate time.Time `json:"first_closure_date" gorm:"first_closure_date"`
-	FinalClosureDate time.Time `json:"final_closure_date" gorm:"final_closure_date"`
+	Title            string    `json:"title" gorm:"title" binding:"required"`
+	StartDate        time.Time `json:"start_date" gorm:"start_date" binding:"required"`
+	EndDate          time.Time `json:"end_date" gorm:"end_date" binding:"required"`
+	FirstClosureDate time.Time `json:"first_closure_date" gorm:"first_closure_date" binding:"required"`
+	FinalClosureDate time.Time `json:"final_closure_date" gorm:"final_closure_date" binding:"required"`
 	Status           bool      `json:"status" gorm:"status"`
 }
 
