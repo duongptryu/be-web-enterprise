@@ -92,6 +92,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 
 		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
 
+		v1.PUT("/profile", ginuser.UpdateUserSelf(appCtx))
+
 		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
 
 		v1.GET("/department", gindepartment.ListDepartmentForStaff(appCtx))

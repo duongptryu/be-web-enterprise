@@ -36,4 +36,5 @@ type UserStore interface {
 		condition map[string]interface{},
 		moreKey ...string,
 	) ([]usermodel.User, error)
+	UpdateUserSelf(ctx context.Context, id int, data *usermodel.UserUpdateSelf) error
 }

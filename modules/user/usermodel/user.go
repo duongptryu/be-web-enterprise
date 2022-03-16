@@ -12,6 +12,7 @@ const (
 type User struct {
 	common.SQLModel
 	FullName     string                   `json:"full_name" gorm:"full_name"`
+	Avatar       string                   `json:"avatar" gorm:"avatar"`
 	Email        string                   `json:"email" gorm:"email"`
 	Password     string                   `json:"-" gorm:"password"`
 	Gender       string                   `json:"gender" gorm:"gender"`
@@ -29,6 +30,7 @@ func (User) TableName() string {
 type UserCreate struct {
 	common.SQLModelCreate
 	FullName     string    `json:"full_name" gorm:"full_name" binding:"required"`
+	Avatar       string    `json:"avatar" gorm:"avatar"`
 	Email        string    `json:"email" gorm:"email" binding:"required"`
 	Password     string    `json:"password" gorm:"password" binding:"required"`
 	Gender       string    `json:"gender" gorm:"gender" binding:"required"`
@@ -49,6 +51,7 @@ func (data *UserCreate) Validate() error {
 type UserUpdate struct {
 	common.SQLModelUpdate
 	FullName     string    `json:"full_name" gorm:"full_name"`
+	Avatar       string    `json:"avatar" gorm:"avatar"`
 	Email        string    `json:"email" gorm:"email"`
 	Gender       string    `json:"gender" gorm:"gender"`
 	DepartmentId int       `json:"department_id" gorm:"department_id"`
@@ -62,5 +65,22 @@ func (UserUpdate) TableName() string {
 }
 
 func (data *UserUpdate) Validate() error {
+	return nil
+}
+
+type UserUpdateSelf struct {
+	common.SQLModelUpdate
+	FullName    string    `json:"full_name" gorm:"full_name"`
+	Avatar      string    `json:"avatar" gorm:"avatar"`
+	Gender      string    `json:"gender" gorm:"gender"`
+	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth"`
+	Status      *bool     `json:"status" gorm:"status"`
+}
+
+func (UserUpdateSelf) TableName() string {
+	return User{}.TableName()
+}
+
+func (data *UserUpdateSelf) Validate() error {
 	return nil
 }

@@ -74,6 +74,10 @@ func ListCommentOfIdeaForStaff(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		for i := range result {
+			if result[i].IsAnonymous {
+				result[i].UserId = 0
+				result[i].User = nil
+			}
 			if i == len(result)-1 {
 				paging.NextCursor = result[i].Id
 			}

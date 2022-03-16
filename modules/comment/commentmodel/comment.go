@@ -14,7 +14,8 @@ type Comment struct {
 	IdeaId       int                `json:"idea_id" gorm:"column:idea_id"`
 	Content      string             `json:"content" gorm:"column:content"`
 	RepliesCount int                `json:"replies_count" gorm:"column:replies_count"`
-	Status       bool               `json:"status" gorm:"status"`
+	Status       bool               `json:"status" gorm:"column:status"`
+	IsAnonymous  bool               `json:"is_anonymous" gorm:"column:is_anonymous"`
 }
 
 func (Comment) TableName() string {
@@ -29,6 +30,7 @@ type CommentCreate struct {
 	Content      string `json:"content" gorm:"column:content"`
 	RepliesCount int    `json:"-" gorm:"column:replies_count"`
 	Status       bool   `json:"-" gorm:"status"`
+	IsAnonymous  bool   `json:"is_anonymous" gorm:"column:is_anonymous"`
 }
 
 func (CommentCreate) TableName() string {

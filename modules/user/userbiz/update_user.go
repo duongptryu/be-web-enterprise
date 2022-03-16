@@ -53,3 +53,23 @@ func (biz *updateUserBiz) UpdateUserBiz(ctx context.Context, userId int, data *u
 
 	return nil
 }
+
+func (biz *updateUserBiz) UpdateUserSelfBiz(ctx context.Context, userId int, data *usermodel.UserUpdateSelf) error {
+	if err := data.Validate(); err != nil {
+		return err
+	}
+
+	userDB, err := biz.store.FindUser(ctx, map[string]interface{}{"id": userId})
+	if err != nil {
+		return common.ErrCannotUpdateEntity(usermodel.EntityName, err)
+	}
+	if userDB.Id == 0 {
+		return common.ErrDataNotFound(usermodel.EntityName)
+	}
+
+	if err := biz.store.UpdateUserSelf(ctx, userId, data); err != nil {
+		return common.ErrCannotUpdateEntity(usermodel.EntityName, err)
+	}
+
+	return nil
+}
