@@ -67,7 +67,7 @@ func (biz *createCommentBiz) CreateCommentBiz(ctx context.Context, data *comment
 		if err != nil {
 			log.Error(err)
 		}
-		go biz.mailProvider.SendMailNotifyNewComment(ctx, &mailprovider.MailDataForComment{Content: content, Email: users[0].Email, Name: users[0].FullName})
+		go biz.mailProvider.SendMailNotifyNewComment(ctx, &mailprovider.MailDataForComment{CommentContent: content, Email: users[0].Email, Name: users[0].FullName, CommentBy: users[0].FullName, CreatedAt: time.Now()})
 	}(biz, ideaExist.UserId, data.Content, data.UserId)
 
 	go biz.pubSub.Publish(ctx, common.TopicIncreaseCommentCountIdea, pubsub.NewMessage(data.IdeaId))

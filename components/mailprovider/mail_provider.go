@@ -6,9 +6,12 @@ import (
 )
 
 type MailDataForComment struct {
-	Email   string
-	Name    string
-	Content string
+	Email          string
+	Name           string
+	CommentContent string
+	CommentBy      string
+	IdeaId         int
+	CreatedAt      time.Time
 }
 
 type MailDataForIdea struct {

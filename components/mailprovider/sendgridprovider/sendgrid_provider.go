@@ -6,29 +6,55 @@ import (
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	log "github.com/sirupsen/logrus"
+	"net/http"
+	"time"
 	"web/components/mailprovider"
 )
 
 type sendgridProvider struct {
-	client *sendgrid.Client
+	client    *sendgrid.Client
+	secretKey string
+	name      string
+	email     string
 }
 
 func NewSendGridProvider(secretKey string) *sendgridProvider {
 	return &sendgridProvider{
-		client: sendgrid.NewSendClient(secretKey),
+		client:    sendgrid.NewSendClient(secretKey),
+		secretKey: secretKey,
+		name:      "Web Enterprise",
+		email:     "duongpt2503@gmail.com",
 	}
 }
 
-func (p *sendgridProvider) SendMailNotifyNewComment(ctx context.Context, data *mailprovider.MailDataForComment) {
-	from := mail.NewEmail("Web Enterprise", "duongpt2503@gmail.com")
-	subject := "You got a new comment in your post idea!!"
-	to := mail.NewEmail(data.Name, data.Email)
-	plainTextContent := data.Content
-	htmlContent := fmt.Sprintf("<strong>%s</strong>", data.Content)
-	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-	response, err := p.client.Send(message)
+func (s *sendgridProvider) SendMailNotifyNewComment(ctx context.Context, data *mailprovider.MailDataForComment) {
+	m := mail.NewV3Mail()
+	from := mail.NewEmail(s.name, s.email)
+	m.SetFrom(from)
+
+	m.SetTemplateID("d-883583940e884f06b44b6b560e418529")
+
+	p := mail.NewPersonalization()
+	tos := []*mail.Email{
+		mail.NewEmail(data.Name, data.Email),
+	}
+	p.AddTos(tos...)
+
+	p.SetDynamicTemplateData("name", data.CommentBy)
+	p.SetDynamicTemplateData("owner", data.Name)
+	p.SetDynamicTemplateData("datetime", data.CreatedAt.Format(time.RFC1123))
+	p.SetDynamicTemplateData("content", data.CommentContent)
+	p.SetDynamicTemplateData("link", fmt.Sprintf("https://groupbar.me/idea/%v", data.IdeaId))
+
+	m.AddPersonalizations(p)
+
+	request := sendgrid.GetRequest(s.secretKey, "/v3/mail/send", "https://api.sendgrid.com")
+	request.Method = http.MethodPost
+	var Body = mail.GetRequestBody(m)
+	request.Body = Body
+	response, err := sendgrid.API(request)
 	if err != nil {
-		log.Error(err)
+		fmt.Println(err)
 	} else {
 		fmt.Println(response.StatusCode)
 		fmt.Println(response.Body)
