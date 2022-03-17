@@ -1,5 +1,5 @@
 APP_NAME=webbe
-DEPLOY_CONNECT=ryu@167.71.214.240
+DEPLOY_CONNECT=ryu@159.65.130.104
 
 echo "Downloading packages ...."
 go mod tidy

@@ -21,6 +21,13 @@ func NewDeleteIdeaBiz(store idealikeviewstore.UserLikeViewIdeaStore, pubSub pubs
 }
 
 func (biz *deleteUserLikeViewIdeaStore) DeleteUserLikeIdea(ctx context.Context, ideaId int, userId int) error {
+	exist, err := biz.store.FindUserLikeIdea(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaId})
+	if err != nil {
+		return err
+	}
+	if exist.IdeaId == 0 {
+		return nil
+	}
 	//create user in db
 	if err := biz.store.DeleteUserLikeIdea(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaId}); err != nil {
 		return common.ErrCannotDeleteEntity(ideamodel.EntityName, err)
@@ -32,6 +39,13 @@ func (biz *deleteUserLikeViewIdeaStore) DeleteUserLikeIdea(ctx context.Context, 
 }
 
 func (biz *deleteUserLikeViewIdeaStore) DeleteUserDislikeIdea(ctx context.Context, ideaId int, userId int) error {
+	exist, err := biz.store.FindUserDislikeIdea(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaId})
+	if err != nil {
+		return err
+	}
+	if exist.IdeaId == 0 {
+		return nil
+	}
 	//create user in db
 	if err := biz.store.DeleteUserDislikeIdea(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaId}); err != nil {
 		return common.ErrCannotDeleteEntity(ideamodel.EntityName, err)
