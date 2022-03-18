@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"time"
 	"web/components/config"
 )
 
@@ -12,6 +13,11 @@ func main() {
 }
 
 func runService() {
+	loc, err := time.LoadLocation("Asia/Ho_Chi_Minh")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	time.Local = loc
 	//init config
 	appConfig, err := config.NewAppConfig("./config.yaml")
 	if err != nil {
