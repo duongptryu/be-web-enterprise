@@ -17,7 +17,7 @@ func NewStatisticIdeaBiz(ideaStore ideastore.IdeaStore) *statisticIdeaBiz {
 }
 
 func (biz *statisticIdeaBiz) StatisticIdeaBiz(ctx context.Context, data *statisticmodel.StatisticReq) (*statisticmodel.StatisticRespIdea, error) {
-	var condition map[string]interface{}
+	var condition = make(map[string]interface{})
 	if data.AcaYearId != 0 {
 		condition["aca_year_id"] = data.AcaYearId
 	}

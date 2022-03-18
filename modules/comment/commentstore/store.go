@@ -31,4 +31,8 @@ type CommentStore interface {
 		condition map[string]interface{},
 		moreKey ...string,
 	) (*commentmodel.Comment, error)
+	CountUserComment(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) (map[int]int, error)
 }

@@ -62,4 +62,12 @@ type UserLikeViewIdeaStore interface {
 		condition map[string]interface{},
 		moreKey ...string,
 	) (map[int]int, error)
+	CountUserLike(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) (map[int]int, error)
+	CountUserDisLike(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) (map[int]int, error)
 }

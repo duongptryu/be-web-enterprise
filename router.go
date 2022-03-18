@@ -60,6 +60,10 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 			}
 		}
 
+		v1.GET("/qam/export-ideas", ginexport.ExportIdeaToCsv(appCtx))
+
+		v1.GET("/qam/export-docs", ginexport.ExportDocs(appCtx))
+
 		QAM := v1.Group("/qam", middleware.RequireQAMAuth(appCtx))
 		{
 			cate := QAM.Group("/category")
@@ -72,14 +76,11 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 
 			QAM.GET("/academic-year", ginacayear.ListAcaYearWithoutPaging(appCtx))
 
-			QAM.GET("/export-ideas", ginexport.ExportIdeaToCsv(appCtx))
-
-			QAM.GET("/export-docs", ginexport.ExportDocs(appCtx))
-
 			stats := QAM.Group("/stats")
 			{
 				stats.GET("/idea", ginstatistic.ListStatisticIdea(appCtx))
 				stats.GET("/overview", ginstatistic.ListStatisticTotal(appCtx))
+				stats.GET("/user", ginstatistic.ListStatisticUser(appCtx))
 			}
 
 		}
@@ -107,6 +108,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 		v1.GET("/category", gincategory.ListCategoryForStaff(appCtx))
 
 		v1.GET("/department", gindepartment.ListDepartmentForStaff(appCtx))
+
+		v1.GET("/current-academic-year", ginacayear.FindCurrentAcaYear(appCtx))
 
 		idea := v1.Group("/idea")
 		{

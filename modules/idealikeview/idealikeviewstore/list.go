@@ -155,3 +155,63 @@ func (s *sqlStore) ListIdeaUserDislike(ctx context.Context,
 	}
 	return result, nil
 }
+
+func (s *sqlStore) CountUserLike(ctx context.Context,
+	condition map[string]interface{},
+	moreKey ...string,
+) (map[int]int, error) {
+	var result = make(map[int]int)
+
+	type sqlData struct {
+		UserId    int `gorm:"column:user_id"`
+		LikeCount int `gorm:"column:count"`
+	}
+
+	var likeData []sqlData
+	db := s.db
+
+	db = db.Table(idealikeviewmodel.UserLikeIdea{}.TableName()).Where(condition)
+
+	for i := range moreKey {
+		db = db.Preload(moreKey[i])
+	}
+
+	if err := db.Select("user_id, count(user_id) as count").Group("user_id").Find(&likeData).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+
+	for _, v := range likeData {
+		result[v.UserId] = v.LikeCount
+	}
+	return result, nil
+}
+
+func (s *sqlStore) CountUserDisLike(ctx context.Context,
+	condition map[string]interface{},
+	moreKey ...string,
+) (map[int]int, error) {
+	var result = make(map[int]int)
+
+	type sqlData struct {
+		UserId       int `gorm:"column:user_id"`
+		dislikeCount int `gorm:"column:count"`
+	}
+
+	var disLikeData []sqlData
+	db := s.db
+
+	db = db.Table(idealikeviewmodel.UserDislikeIdea{}.TableName()).Where(condition)
+
+	for i := range moreKey {
+		db = db.Preload(moreKey[i])
+	}
+
+	if err := db.Select("user_id, count(user_id) as count").Group("user_id").Find(&disLikeData).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+
+	for _, v := range disLikeData {
+		result[v.UserId] = v.dislikeCount
+	}
+	return result, nil
+}

@@ -26,11 +26,9 @@ func (biz *statisticTotalBiz) StatisticTotalBiz(ctx context.Context) (*statistic
 	}
 
 	var totalInteractive int
-	var totalComment int
 
 	for i, _ := range ideas {
-		totalInteractive += ideas[i].LikesCount + ideas[i].DislikesCount
-		totalComment += ideas[i].CommentsCount
+		totalInteractive += ideas[i].LikesCount + ideas[i].DislikesCount + ideas[i].CommentsCount
 	}
 
 	userCount, err := biz.userStore.CountUser(ctx, nil)
@@ -40,7 +38,6 @@ func (biz *statisticTotalBiz) StatisticTotalBiz(ctx context.Context) (*statistic
 
 	var result statisticmodel.StatisticRespTotal
 
-	result.TotalComment = totalComment
 	result.TotalInteractive = totalInteractive
 	result.TotalUser = userCount
 	result.TotalIdea = len(ideas)

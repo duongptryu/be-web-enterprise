@@ -5,6 +5,10 @@ type StatisticReq struct {
 	AcaYearId    int `json:"aca_year_id" gorm:"aca_year_id"`
 }
 
+type StatisticUser struct {
+	DepartmentId int `json:"department_id" form:"department_id"`
+}
+
 type StatisticRespIdea struct {
 	Title        []string `json:"title"`
 	Id           []int    `json:"id"`
@@ -17,6 +21,11 @@ type StatisticRespIdea struct {
 type StatisticRespTotal struct {
 	TotalUser        int `json:"total_user"`
 	TotalIdea        int `json:"total_idea"`
-	TotalComment     int `json:"total_comment"`
 	TotalInteractive int `json:"total_interactive"`
+}
+
+type StatisticRespUser struct {
+	UsersName        []string `json:"users_name"`
+	UsersId          []int    `json:"users_id"`
+	UsersInteractive []int    `json:"users_interactive"`
 }
