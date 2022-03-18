@@ -41,3 +41,18 @@ func ListAcaYear(appCtx component.AppContext) gin.HandlerFunc {
 		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
 	}
 }
+
+func ListAcaYearWithoutPaging(appCtx component.AppContext) gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		store := acayearstore.NewSQLStore(appCtx.GetDatabase())
+		biz := acayearbiz.NewListAcaYearBiz(store)
+
+		result, err := biz.ListAcaYearBizWithoutPaging(c.Request.Context())
+		if err != nil {
+			panic(err)
+		}
+
+		c.JSON(http.StatusOK, common.NewSimpleSuccessResponse(result))
+	}
+}

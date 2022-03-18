@@ -32,4 +32,8 @@ type AcademicYearStore interface {
 		condition map[string]interface{},
 		moreKey ...string,
 	) (*acayearmodel.AcademicYear, error)
+	ListAcaYearWithoutPaging(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) ([]acayearmodel.AcademicYear, error)
 }

@@ -11,6 +11,7 @@ import (
 	"web/modules/idea/ideatransport/ginidea"
 	"web/modules/idealikeview/idealikeviewtransport/ginuserlikeviewidea"
 	"web/modules/replycomment/replytransport/ginreply"
+	"web/modules/statistic/statistictransport/ginstatistic"
 	"web/modules/upload/uploadtransport/ginupload"
 	"web/modules/user/usertransport/ginuser"
 
@@ -69,9 +70,18 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 				cate.DELETE("/:cate_id", gincategory.DeleteCategory(appCtx))
 			}
 
+			QAM.GET("/academic-year", ginacayear.ListAcaYearWithoutPaging(appCtx))
+
 			QAM.GET("/export-ideas", ginexport.ExportIdeaToCsv(appCtx))
 
 			QAM.GET("/export-docs", ginexport.ExportDocs(appCtx))
+
+			stats := QAM.Group("/stats")
+			{
+				stats.GET("/idea", ginstatistic.ListStatisticIdea(appCtx))
+				stats.GET("/overview", ginstatistic.ListStatisticTotal(appCtx))
+			}
+
 		}
 
 		advance := v1.Group("adv", middleware.RequireAdvAuth(appCtx))

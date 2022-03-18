@@ -25,3 +25,12 @@ func (biz *listAcaYearBiz) ListAcaYearBiz(ctx context.Context, paging *common.Pa
 
 	return result, nil
 }
+
+func (biz *listAcaYearBiz) ListAcaYearBizWithoutPaging(ctx context.Context) ([]acayearmodel.AcademicYear, error) {
+	result, err := biz.store.ListAcaYearWithoutPaging(ctx, nil)
+	if err != nil {
+		return nil, common.ErrCannotListEntity(acayearmodel.EntityName, err)
+	}
+
+	return result, nil
+}

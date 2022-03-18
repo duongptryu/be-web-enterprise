@@ -75,3 +75,21 @@ func (s *sqlStore) ListUserWithoutPaging(ctx context.Context,
 	}
 	return result, nil
 }
+
+func (s *sqlStore) CountUser(ctx context.Context,
+	condition map[string]interface{},
+) (int, error) {
+	db := s.db
+
+	db = db.Table(usermodel.User{}.TableName()).Where(condition)
+
+	var result int64
+
+	if err := db.Count(&result).Error; err != nil {
+		return 0, common.ErrDB(err)
+	}
+
+	resultInt := int(result)
+
+	return resultInt, nil
+}
