@@ -20,6 +20,8 @@ type MailDataForIdea struct {
 	NameUserPush  string
 	EmailUserPush string
 	Title         string
+	Content       string
+	Id            int
 	CreatedAt     *time.Time
 }
 

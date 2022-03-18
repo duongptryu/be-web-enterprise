@@ -66,6 +66,10 @@ func (biz *createIdeaBiz) CreateIdeaBiz(ctx context.Context, data *ideamodel.Ide
 		return common.ErrDataNotFound(usermodel.EntityName)
 	}
 
+	if owner.Role != common.RoleStaff {
+		return ideamodel.ErrAccountCannotCreateIdea
+	}
+
 	data.DepartmentId = owner.DepartmentId
 	data.AcaYearId = acaExist.Id
 	data.Status = true
@@ -105,6 +109,8 @@ func (biz *createIdeaBiz) pushNotiEmailForQAC(ctx context.Context, data *ideamod
 		NameUserPush:  user.FullName,
 		EmailUserPush: user.Email,
 		Title:         data.Title,
+		Id:            data.Id,
+		Content:       data.Content,
 		CreatedAt:     data.CreatedAt,
 	})
 }
