@@ -26,32 +26,32 @@ func (biz *listIdeaBiz) ListIdeaBiz(ctx context.Context, userId int, paging *com
 		return nil, common.ErrCannotListEntity(ideamodel.EntityName, err)
 	}
 
-	ideaIds := make([]int, len(result))
+	//ideaIds := make([]int, len(result))
+	//for i, _ := range result {
+	//	ideaIds[i] = result[i].Id
+	//}
+	//
+	//likeData, err := biz.likeStore.ListIdeaUserLike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//dislikeData, err := biz.likeStore.ListIdeaUserDislike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
+	//if err != nil {
+	//	return nil, err
+	//}
+
 	for i, _ := range result {
-		ideaIds[i] = result[i].Id
-	}
-
-	likeData, err := biz.likeStore.ListIdeaUserLike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
-	if err != nil {
-		return nil, err
-	}
-
-	dislikeData, err := biz.likeStore.ListIdeaUserDislike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
-	if err != nil {
-		return nil, err
-	}
-
-	for i, _ := range result {
-		if _, existLike := likeData[result[i].Id]; existLike {
-			result[i].IsLike = true
-		} else if _, existDislike := dislikeData[result[i].Id]; existDislike {
-			result[i].IsDislike = true
-		}
-
-		if result[i].IsAnonymous {
-			result[i].UserId = 0
-			result[i].User = nil
-		}
+		//if _, existLike := likeData[result[i].Id]; existLike {
+		//	result[i].IsLike = true
+		//} else if _, existDislike := dislikeData[result[i].Id]; existDislike {
+		//	result[i].IsDislike = true
+		//}
+		//
+		//if result[i].IsAnonymous {
+		//	result[i].UserId = 0
+		//	result[i].User = nil
+		//}
 		if i == len(result)-1 {
 			paging.NextCursor = result[i].Id
 		}
@@ -66,32 +66,32 @@ func (biz *listIdeaBiz) ListIdeaBizForStaff(ctx context.Context, userId int, pag
 		return nil, common.ErrCannotListEntity(ideamodel.EntityName, err)
 	}
 
-	ideaIds := make([]int, len(result))
+	//ideaIds := make([]int, len(result))
+	//for i, _ := range result {
+	//	ideaIds[i] = result[i].Id
+	//}
+	//
+	//likeData, err := biz.likeStore.ListIdeaUserLike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//dislikeData, err := biz.likeStore.ListIdeaUserDislike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
+	//if err != nil {
+	//	return nil, err
+	//}
+
 	for i, _ := range result {
-		ideaIds[i] = result[i].Id
-	}
-
-	likeData, err := biz.likeStore.ListIdeaUserLike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
-	if err != nil {
-		return nil, err
-	}
-
-	dislikeData, err := biz.likeStore.ListIdeaUserDislike(ctx, map[string]interface{}{"user_id": userId, "idea_id": ideaIds})
-	if err != nil {
-		return nil, err
-	}
-
-	for i, _ := range result {
-		if _, existLike := likeData[result[i].Id]; existLike {
-			result[i].IsLike = true
-		} else if _, existDislike := dislikeData[result[i].Id]; existDislike {
-			result[i].IsDislike = true
-		}
-
-		if result[i].IsAnonymous {
-			result[i].UserId = 0
-			result[i].User = nil
-		}
+		//if _, existLike := likeData[result[i].Id]; existLike {
+		//	result[i].IsLike = true
+		//} else if _, existDislike := dislikeData[result[i].Id]; existDislike {
+		//	result[i].IsDislike = true
+		//}
+		//
+		//if result[i].IsAnonymous {
+		//	result[i].UserId = 0
+		//	result[i].User = nil
+		//}
 		if i == len(result)-1 {
 			paging.NextCursor = result[i].Id
 		}

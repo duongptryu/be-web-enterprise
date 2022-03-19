@@ -12,16 +12,18 @@ import (
 )
 
 type findIdeaBiz struct {
-	store     ideastore.IdeaStore
-	viewStore idealikeviewstore.UserLikeViewIdeaStore
-	pubSub    pubsub.PubSub
+	store         ideastore.IdeaStore
+	viewStore     idealikeviewstore.UserLikeViewIdeaStore
+	pubSub        pubsub.PubSub
+	likeViewStore idealikeviewstore.UserLikeViewIdeaStore
 }
 
-func NewFindIdeaBiz(store ideastore.IdeaStore, viewStore idealikeviewstore.UserLikeViewIdeaStore, pubSub pubsub.PubSub) *findIdeaBiz {
+func NewFindIdeaBiz(store ideastore.IdeaStore, viewStore idealikeviewstore.UserLikeViewIdeaStore, pubSub pubsub.PubSub, likeViewStore idealikeviewstore.UserLikeViewIdeaStore) *findIdeaBiz {
 	return &findIdeaBiz{
-		store:     store,
-		viewStore: viewStore,
-		pubSub:    pubSub,
+		store:         store,
+		viewStore:     viewStore,
+		pubSub:        pubSub,
+		likeViewStore: likeViewStore,
 	}
 }
 
@@ -32,6 +34,27 @@ func (biz *findIdeaBiz) FindIdeaBiz(ctx context.Context, id int, userId int) (*i
 	}
 	if result.Id == 0 {
 		return nil, common.ErrDataNotFound(ideamodel.EntityName)
+	}
+
+	likeData, err := biz.likeViewStore.ListIdeaUserLike(ctx, map[string]interface{}{"user_id": userId, "idea_id": result.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	dislikeData, err := biz.likeViewStore.ListIdeaUserDislike(ctx, map[string]interface{}{"user_id": userId, "idea_id": result.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	if _, existLike := likeData[result.Id]; existLike {
+		result.IsLike = true
+	} else if _, existDislike := dislikeData[result.Id]; existDislike {
+		result.IsDislike = true
+	}
+
+	if result.IsAnonymous {
+		result.UserId = 0
+		result.User = nil
 	}
 
 	//increase view count
@@ -47,6 +70,27 @@ func (biz *findIdeaBiz) FindIdeaBizForStaff(ctx context.Context, id int, userId 
 	}
 	if result.Id == 0 {
 		return nil, common.ErrDataNotFound(ideamodel.EntityName)
+	}
+
+	likeData, err := biz.likeViewStore.ListIdeaUserLike(ctx, map[string]interface{}{"user_id": userId, "idea_id": result.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	dislikeData, err := biz.likeViewStore.ListIdeaUserDislike(ctx, map[string]interface{}{"user_id": userId, "idea_id": result.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	if _, existLike := likeData[result.Id]; existLike {
+		result.IsLike = true
+	} else if _, existDislike := dislikeData[result.Id]; existDislike {
+		result.IsDislike = true
+	}
+
+	if result.IsAnonymous {
+		result.UserId = 0
+		result.User = nil
 	}
 
 	//increase view count

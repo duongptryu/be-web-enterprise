@@ -22,7 +22,8 @@ func FindIdea(appCtx component.AppContext) gin.HandlerFunc {
 
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())
 		viewStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewFindIdeaBiz(store, viewStore, appCtx.GetPubSub())
+		likeStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewFindIdeaBiz(store, viewStore, appCtx.GetPubSub(), likeStore)
 
 		result, err := biz.FindIdeaBiz(c.Request.Context(), ideaId, userId)
 		if err != nil {
@@ -44,7 +45,8 @@ func FindIdeaForStaff(appCtx component.AppContext) gin.HandlerFunc {
 
 		store := ideastore.NewSQLStore(appCtx.GetDatabase())
 		viewStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := ideabiz.NewFindIdeaBiz(store, viewStore, appCtx.GetPubSub())
+		likeStore := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
+		biz := ideabiz.NewFindIdeaBiz(store, viewStore, appCtx.GetPubSub(), likeStore)
 
 		result, err := biz.FindIdeaBizForStaff(c.Request.Context(), ideaId, userId)
 		if err != nil {

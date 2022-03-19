@@ -44,6 +44,9 @@ func (biz *createCommentBiz) CreateCommentBiz(ctx context.Context, data *comment
 	if err != nil {
 		return err
 	}
+	if ideaExist.Status == false {
+		return ideamodel.ErrIdeaAlreadyRemoved
+	}
 	if ideaExist.Id == 0 {
 		return common.ErrDataNotFound(ideamodel.EntityName)
 	}
