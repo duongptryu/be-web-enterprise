@@ -88,10 +88,10 @@ func (biz *listIdeaBiz) ListIdeaBizForStaff(ctx context.Context, userId int, pag
 		//	result[i].IsDislike = true
 		//}
 		//
-		//if result[i].IsAnonymous {
-		//	result[i].UserId = 0
-		//	result[i].User = nil
-		//}
+		if result[i].IsAnonymous {
+			result[i].UserId = 0
+			result[i].User = nil
+		}
 		if i == len(result)-1 {
 			paging.NextCursor = result[i].Id
 		}
