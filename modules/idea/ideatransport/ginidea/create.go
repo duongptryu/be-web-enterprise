@@ -10,6 +10,7 @@ import (
 	"web/modules/idea/ideabiz"
 	"web/modules/idea/ideamodel"
 	"web/modules/idea/ideastore"
+	"web/modules/notification/notificationstore"
 	"web/modules/user/userstore"
 )
 
@@ -28,8 +29,9 @@ func CreateIdea(appCtx component.AppContext) func(c *gin.Context) {
 		userStore := userstore.NewSQLStore(appCtx.GetDatabase())
 		acaYearStore := acayearstore.NewSQLStore(appCtx.GetDatabase())
 		departmentStore := departmentstore.NewSQLStore(appCtx.GetDatabase())
+		notificationStore := notificationstore.NewSQLStore(appCtx.GetDatabase())
 
-		biz := ideabiz.NewCreateIdeaBiz(store, categoryStore, acaYearStore, userStore, departmentStore, appCtx.GetMailProvider())
+		biz := ideabiz.NewCreateIdeaBiz(store, categoryStore, acaYearStore, userStore, departmentStore, appCtx.GetMailProvider(), notificationStore)
 
 		if err := biz.CreateIdeaBiz(c.Request.Context(), &data); err != nil {
 			panic(err)

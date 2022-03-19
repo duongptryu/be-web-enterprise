@@ -9,6 +9,7 @@ import (
 	"web/modules/comment/commentmodel"
 	"web/modules/comment/commentstore"
 	"web/modules/idea/ideastore"
+	"web/modules/notification/notificationstore"
 	"web/modules/user/userstore"
 )
 
@@ -26,7 +27,9 @@ func CreateComment(appCtx component.AppContext) func(c *gin.Context) {
 		ideaStore := ideastore.NewSQLStore(appCtx.GetDatabase())
 		acaYearStore := acayearstore.NewSQLStore(appCtx.GetDatabase())
 		userStore := userstore.NewSQLStore(appCtx.GetDatabase())
-		biz := commentbiz.NewCreateCommentBiz(ideaStore, commentStore, acaYearStore, appCtx.GetPubSub(), appCtx.GetMailProvider(), userStore)
+		notificationStore := notificationstore.NewSQLStore(appCtx.GetDatabase())
+
+		biz := commentbiz.NewCreateCommentBiz(ideaStore, commentStore, acaYearStore, appCtx.GetPubSub(), appCtx.GetMailProvider(), userStore, notificationStore)
 
 		if err := biz.CreateCommentBiz(c.Request.Context(), &data); err != nil {
 			panic(err)

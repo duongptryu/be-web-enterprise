@@ -10,6 +10,7 @@ import (
 	"web/modules/export/exporttransport/ginexport"
 	"web/modules/idea/ideatransport/ginidea"
 	"web/modules/idealikeview/idealikeviewtransport/ginuserlikeviewidea"
+	"web/modules/notification/notificationtransport/ginnotification"
 	"web/modules/replycomment/replytransport/ginreply"
 	"web/modules/statistic/statistictransport/ginstatistic"
 	"web/modules/upload/uploadtransport/ginupload"
@@ -110,6 +111,10 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 		v1.GET("/department", gindepartment.ListDepartmentForStaff(appCtx))
 
 		v1.GET("/current-academic-year", ginacayear.FindCurrentAcaYear(appCtx))
+
+		v1.GET("/notification", ginnotification.ListNotification(appCtx))
+
+		v1.PUT("/notification/:noti_id", ginnotification.ReadNotification(appCtx))
 
 		idea := v1.Group("/idea")
 		{

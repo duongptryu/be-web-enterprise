@@ -11,27 +11,31 @@ import (
 	"web/modules/comment/commentstore"
 	"web/modules/idea/ideamodel"
 	"web/modules/idea/ideastore"
+	"web/modules/notification/notificationmodel"
+	"web/modules/notification/notificationstore"
 	"web/modules/user/userstore"
 	"web/pubsub"
 )
 
 type createCommentBiz struct {
-	ideaStore    ideastore.IdeaStore
-	commentStore commentstore.CommentStore
-	acaYearStore acayearstore.AcademicYearStore
-	mailProvider mailprovider.MailProvider
-	userStore    userstore.UserStore
-	pubSub       pubsub.PubSub
+	ideaStore         ideastore.IdeaStore
+	commentStore      commentstore.CommentStore
+	acaYearStore      acayearstore.AcademicYearStore
+	mailProvider      mailprovider.MailProvider
+	userStore         userstore.UserStore
+	pubSub            pubsub.PubSub
+	notificationStore notificationstore.NotificationStore
 }
 
-func NewCreateCommentBiz(store ideastore.IdeaStore, commentStore commentstore.CommentStore, acaYearStore acayearstore.AcademicYearStore, pubSub pubsub.PubSub, mailProvider mailprovider.MailProvider, userStore userstore.UserStore) *createCommentBiz {
+func NewCreateCommentBiz(store ideastore.IdeaStore, commentStore commentstore.CommentStore, acaYearStore acayearstore.AcademicYearStore, pubSub pubsub.PubSub, mailProvider mailprovider.MailProvider, userStore userstore.UserStore, notificationStore notificationstore.NotificationStore) *createCommentBiz {
 	return &createCommentBiz{
-		ideaStore:    store,
-		commentStore: commentStore,
-		acaYearStore: acaYearStore,
-		pubSub:       pubSub,
-		mailProvider: mailProvider,
-		userStore:    userStore,
+		ideaStore:         store,
+		commentStore:      commentStore,
+		acaYearStore:      acaYearStore,
+		pubSub:            pubSub,
+		mailProvider:      mailProvider,
+		userStore:         userStore,
+		notificationStore: notificationStore,
 	}
 }
 
@@ -62,13 +66,27 @@ func (biz *createCommentBiz) CreateCommentBiz(ctx context.Context, data *comment
 		return common.ErrCannotCreateEntity(commentmodel.EntityName, err)
 	}
 
-	go func(b *createCommentBiz, ownerId int, content string, commenterId int) {
+	go func(b *createCommentBiz, ownerId int, ideaId int, content string, commenterId int) {
 		users, err := b.userStore.ListUserWithoutPaging(ctx, map[string]interface{}{"id": []int{ownerId, commenterId}})
 		if err != nil {
 			log.Error(err)
 		}
-		go biz.mailProvider.SendMailNotifyNewComment(ctx, &mailprovider.MailDataForComment{CommentContent: content, Email: users[0].Email, Name: users[0].FullName, CommentBy: users[0].FullName, CreatedAt: time.Now()})
-	}(biz, ideaExist.UserId, data.Content, data.UserId)
+		go b.mailProvider.SendMailNotifyNewComment(ctx, &mailprovider.MailDataForComment{CommentContent: content, Email: users[0].Email, Name: users[0].FullName, CommentBy: users[0].FullName, CreatedAt: time.Now()})
+
+		if ownerId == commenterId {
+			return
+		}
+
+		newNoti := notificationmodel.NotificationIdeaCreate{
+			TypeNoti: common.NewCommentNotification,
+			OwnerId:  ownerId,
+			IdeaId:   ideaId,
+			UserId:   commenterId,
+		}
+		if err := b.notificationStore.CreateNotification(ctx, &newNoti); err != nil {
+			log.Error(err)
+		}
+	}(biz, ideaExist.UserId, ideaExist.Id, data.Content, data.UserId)
 
 	go biz.pubSub.Publish(ctx, common.TopicIncreaseCommentCountIdea, pubsub.NewMessage(data.IdeaId))
 

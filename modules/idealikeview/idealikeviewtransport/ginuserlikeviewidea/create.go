@@ -5,9 +5,11 @@ import (
 	"strconv"
 	"web/common"
 	component "web/components"
+	"web/modules/idea/ideastore"
 	"web/modules/idealikeview/idealikeviewbiz"
 	"web/modules/idealikeview/idealikeviewmodel"
 	"web/modules/idealikeview/idealikeviewstore"
+	"web/modules/notification/notificationstore"
 )
 
 func CreateUserLikeIdea(appCtx component.AppContext) func(c *gin.Context) {
@@ -23,7 +25,10 @@ func CreateUserLikeIdea(appCtx component.AppContext) func(c *gin.Context) {
 		data.UserId = c.MustGet(common.KeyUserHeader).(int)
 
 		store := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := idealikeviewbiz.NewCreateIdeaBiz(store, appCtx.GetPubSub())
+		ideaStore := ideastore.NewSQLStore(appCtx.GetDatabase())
+		notiStore := notificationstore.NewSQLStore(appCtx.GetDatabase())
+
+		biz := idealikeviewbiz.NewCreateIdeaBiz(store, appCtx.GetPubSub(), ideaStore, notiStore)
 
 		if err := biz.CreateUserLikeIdeaBiz(c.Request.Context(), &data); err != nil {
 			panic(err)
@@ -46,7 +51,10 @@ func CreateUserDislikeIdea(appCtx component.AppContext) func(c *gin.Context) {
 		data.UserId = c.MustGet(common.KeyUserHeader).(int)
 
 		store := idealikeviewstore.NewSQLStore(appCtx.GetDatabase())
-		biz := idealikeviewbiz.NewCreateIdeaBiz(store, appCtx.GetPubSub())
+		ideaStore := ideastore.NewSQLStore(appCtx.GetDatabase())
+		notiStore := notificationstore.NewSQLStore(appCtx.GetDatabase())
+
+		biz := idealikeviewbiz.NewCreateIdeaBiz(store, appCtx.GetPubSub(), ideaStore, notiStore)
 
 		if err := biz.CreateUserDislikeIdeaBiz(c.Request.Context(), &data); err != nil {
 			panic(err)

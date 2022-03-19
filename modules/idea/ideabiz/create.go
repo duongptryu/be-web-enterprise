@@ -12,27 +12,31 @@ import (
 	"web/modules/department/departmentstore"
 	"web/modules/idea/ideamodel"
 	"web/modules/idea/ideastore"
+	"web/modules/notification/notificationmodel"
+	"web/modules/notification/notificationstore"
 	"web/modules/user/usermodel"
 	"web/modules/user/userstore"
 )
 
 type createIdeaBiz struct {
-	store           ideastore.IdeaStore
-	categoryStore   categorystore.CategoryStore
-	acaYearStore    acayearstore.AcademicYearStore
-	userStore       userstore.UserStore
-	departmentStore departmentstore.DepartmentStore
-	mailProvider    mailprovider.MailProvider
+	store             ideastore.IdeaStore
+	categoryStore     categorystore.CategoryStore
+	acaYearStore      acayearstore.AcademicYearStore
+	userStore         userstore.UserStore
+	departmentStore   departmentstore.DepartmentStore
+	mailProvider      mailprovider.MailProvider
+	notificationStore notificationstore.NotificationStore
 }
 
-func NewCreateIdeaBiz(store ideastore.IdeaStore, categoryStore categorystore.CategoryStore, acaYearStore acayearstore.AcademicYearStore, userStore userstore.UserStore, departmentStore departmentstore.DepartmentStore, mailProvider mailprovider.MailProvider) *createIdeaBiz {
+func NewCreateIdeaBiz(store ideastore.IdeaStore, categoryStore categorystore.CategoryStore, acaYearStore acayearstore.AcademicYearStore, userStore userstore.UserStore, departmentStore departmentstore.DepartmentStore, mailProvider mailprovider.MailProvider, notificationStore notificationstore.NotificationStore) *createIdeaBiz {
 	return &createIdeaBiz{
-		store:           store,
-		categoryStore:   categoryStore,
-		acaYearStore:    acaYearStore,
-		userStore:       userStore,
-		departmentStore: departmentStore,
-		mailProvider:    mailProvider,
+		store:             store,
+		categoryStore:     categoryStore,
+		acaYearStore:      acaYearStore,
+		userStore:         userStore,
+		departmentStore:   departmentStore,
+		mailProvider:      mailProvider,
+		notificationStore: notificationStore,
 	}
 }
 
@@ -79,6 +83,7 @@ func (biz *createIdeaBiz) CreateIdeaBiz(ctx context.Context, data *ideamodel.Ide
 
 	//push noti email for QAC of this department
 	go biz.pushNotiEmailForQAC(ctx, data, owner)
+
 	return nil
 }
 
@@ -113,4 +118,14 @@ func (biz *createIdeaBiz) pushNotiEmailForQAC(ctx context.Context, data *ideamod
 		Content:       data.Content,
 		CreatedAt:     data.CreatedAt,
 	})
+
+	newNoti := notificationmodel.NotificationIdeaCreate{
+		TypeNoti: common.NewIdeaNotification,
+		OwnerId:  ownerDepartment.Id,
+		IdeaId:   data.Id,
+		UserId:   data.UserId,
+	}
+	if err := biz.notificationStore.CreateNotification(ctx, &newNoti); err != nil {
+		log.Error(err)
+	}
 }
