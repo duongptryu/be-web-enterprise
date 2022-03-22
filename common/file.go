@@ -14,6 +14,7 @@ type File struct {
 	NameOrigin string  `json:"name_origin,omitempty" gorm:"column:name_origin"`
 	Size       float64 `json:"size,omitempty" gorm:"column:size"`
 	Ext        string  `json:"ext,omitempty" gorm:"column:ext"`
+	Folder     string  `json:"folder" gorm:"-"`
 }
 
 func (File) TableName() string {

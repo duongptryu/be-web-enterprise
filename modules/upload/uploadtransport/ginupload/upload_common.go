@@ -12,7 +12,7 @@ import (
 	"web/modules/upload/uploadstore"
 )
 
-func Upload(appCtx component.AppContext) func(ctx *gin.Context) {
+func UploadCommon(appCtx component.AppContext) func(ctx *gin.Context) {
 	return func(c *gin.Context) {
 		fileHeader, err := c.FormFile("upload")
 		if err != nil {
@@ -26,14 +26,14 @@ func Upload(appCtx component.AppContext) func(ctx *gin.Context) {
 		fileStore := uploadstore.NewSQLStore(appCtx.GetDatabase())
 		acaYearStore := acayearstore.NewSQLStore(appCtx.GetDatabase())
 		biz := uploadbiz.NewUploadFileBiz(fileStore, acaYearStore)
-		f, err := biz.UploadFileBiz(c.Request.Context(), fileHeader.Filename, fileHeader.Size)
+		f, err := biz.UploadFileCommonBiz(c.Request.Context(), fileHeader.Filename, fileHeader.Size)
 
 		//store image into own system
-		c.SaveUploadedFile(fileHeader, fmt.Sprintf("./assets/%s/%s", f.Folder, f.Name))
-
+		err = c.SaveUploadedFile(fileHeader, fmt.Sprintf("./assets/%s/%s", f.Folder, f.Name))
 		if err != nil {
-			panic(err)
+			panic(common.ErrInternal(err))
 		}
+
 		c.JSON(200, common.NewSimpleSuccessResponse(f))
 	}
 }

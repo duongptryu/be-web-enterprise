@@ -102,6 +102,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 		v1.Use(middleware.RequireAuth(appCtx))
 		v1.POST("/upload", ginupload.Upload(appCtx))
 
+		v1.POST("/upload-common", ginupload.UploadCommon(appCtx))
+
 		v1.GET("/profile", ginuser.GetProfileUser(appCtx))
 
 		v1.PUT("/profile", ginuser.UpdateUserSelf(appCtx))

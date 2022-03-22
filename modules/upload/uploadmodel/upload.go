@@ -2,6 +2,7 @@ package uploadmodel
 
 import (
 	"errors"
+	"strings"
 	"web/common"
 )
 
@@ -18,7 +19,7 @@ func ErrCannotSaveFile(err error) *common.AppError {
 }
 
 func ValidateFileExt(ext string) error {
-	if _, exist := extWhiteList[ext]; !exist {
+	if _, exist := extWhiteList[strings.ToLower(ext)]; !exist {
 		return ErrExtFileInvalid
 	}
 	return nil
