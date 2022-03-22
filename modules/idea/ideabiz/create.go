@@ -117,6 +117,7 @@ func (biz *createIdeaBiz) pushNotiEmailForQAC(ctx context.Context, data *ideamod
 		Id:            data.Id,
 		Content:       data.Content,
 		CreatedAt:     data.CreatedAt,
+		ThumbnailUrl:  data.ThumbnailUrl,
 	})
 
 	newNoti := notificationmodel.NotificationIdeaCreate{

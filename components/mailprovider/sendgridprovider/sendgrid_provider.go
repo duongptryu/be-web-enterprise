@@ -76,7 +76,7 @@ func (s *sendgridProvider) SendMailNotifyNewIdea(ctx context.Context, data *mail
 
 	p.SetDynamicTemplateData("name", data.Name)
 	p.SetDynamicTemplateData("datetime", data.CreatedAt.Format(time.RFC1123))
-	//p.SetDynamicTemplateData("content", data.Content)
+	p.SetDynamicTemplateData("thumbnail_url", data.ThumbnailUrl)
 	p.SetDynamicTemplateData("title", data.Title)
 	p.SetDynamicTemplateData("link", fmt.Sprintf("https://groupbar.me/idea/view-idea/%v", data.Id))
 
