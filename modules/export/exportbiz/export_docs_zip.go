@@ -27,5 +27,5 @@ func (biz *exportDocsZip) ExportDocsZip(ctx context.Context, acaYearId int) (str
 		return "", common.ErrDataNotFound(acayearmodel.EntityName)
 	}
 
-	return fmt.Sprintf("./assets/%v", acaYearExist.Id), nil
+	return fmt.Sprintf("./assets/%v/", acaYearExist.Id), nil
 }

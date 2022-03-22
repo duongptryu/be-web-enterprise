@@ -43,7 +43,7 @@ func (s *sendgridProvider) SendMailNotifyNewComment(ctx context.Context, data *m
 	p.SetDynamicTemplateData("owner", data.Name)
 	p.SetDynamicTemplateData("datetime", data.CreatedAt.Format(time.RFC1123))
 	p.SetDynamicTemplateData("content", data.CommentContent)
-	p.SetDynamicTemplateData("link", fmt.Sprintf("https://groupbar.me/idea/%v", data.IdeaId))
+	p.SetDynamicTemplateData("link", fmt.Sprintf("https://groupbar.me/idea/view-idea/%v", data.IdeaId))
 
 	m.AddPersonalizations(p)
 
@@ -76,9 +76,9 @@ func (s *sendgridProvider) SendMailNotifyNewIdea(ctx context.Context, data *mail
 
 	p.SetDynamicTemplateData("name", data.Name)
 	p.SetDynamicTemplateData("datetime", data.CreatedAt.Format(time.RFC1123))
-	p.SetDynamicTemplateData("content", data.Content)
+	//p.SetDynamicTemplateData("content", data.Content)
 	p.SetDynamicTemplateData("title", data.Title)
-	p.SetDynamicTemplateData("link", fmt.Sprintf("https://groupbar.me/idea/%v", data.Id))
+	p.SetDynamicTemplateData("link", fmt.Sprintf("https://groupbar.me/idea/view-idea/%v", data.Id))
 
 	m.AddPersonalizations(p)
 

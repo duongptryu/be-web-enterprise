@@ -38,9 +38,18 @@ func ExportDocs(appCtx component.AppContext) func(c *gin.Context) {
 		ar := zip.NewWriter(c.Writer)
 
 		for _, file := range files {
-			file1, _ := os.Open(dir + file.Name())
-			f1, _ := ar.Create(file.Name())
-			io.Copy(f1, file1)
+			file1, err := os.Open(dir + file.Name())
+			if err != nil {
+				panic(common.ErrInternal(err))
+			}
+			f1, err := ar.Create(file.Name())
+			if err != nil {
+				panic(common.ErrInternal(err))
+			}
+			_, err = io.Copy(f1, file1)
+			if err != nil {
+				panic(common.ErrInternal(err))
+			}
 		}
 
 		c.Writer.Header().Set("Content-type", "application/octet-stream")
