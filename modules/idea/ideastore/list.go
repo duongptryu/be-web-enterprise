@@ -31,6 +31,9 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 		if v.AcaYearId != 0 {
 			db = db.Where("aca_year_id = ?", v.AcaYearId)
 		}
+		if v.CategoryId != 0 {
+			db = db.Where("category_id = ?", v.CategoryId)
+		}
 		if v.DislikeGt > 0 {
 			db = db.Where("dislike_count >= ?", v.DislikeGt)
 		}
@@ -66,7 +69,7 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 				db = db.Order("dislikes_count desc")
 			case "view_desc":
 				db = db.Order("views_count desc")
-			case "created_at_desc":
+			case "created_desc":
 				db = db.Order("created_at desc")
 			case "like_asc":
 				db = db.Order("likes_count")
@@ -74,7 +77,7 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 				db = db.Order("dislikes_count")
 			case "view_asc":
 				db = db.Order("views_count")
-			case "created_at_asc":
+			case "created_asc":
 				db = db.Order("created_at")
 			}
 		} else {

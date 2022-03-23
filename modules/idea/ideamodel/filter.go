@@ -4,6 +4,7 @@ type Filter struct {
 	Title          string `json:"title" form:"title"`
 	UserId         int    `json:"user_id" form:"user_id"`
 	CategoryName   string `json:"category" form:"category"`
+	CategoryId     int    `json:"category_id" form:"category_id"`
 	AcaYearId      int    `json:"aca_year_id" form:"aca_year_id"`
 	AcaYear        string `json:"aca_year" form:"aca_year"`
 	DepartmentName string `json:"department" form:"department"`
