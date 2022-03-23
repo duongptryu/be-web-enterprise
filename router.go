@@ -114,6 +114,8 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 
 		v1.GET("/current-academic-year", ginacayear.FindCurrentAcaYear(appCtx))
 
+		v1.GET("/current-academic-year/check", ginacayear.CheckCanPostIdeaOrComment(appCtx))
+
 		v1.GET("/notification", ginnotification.ListNotification(appCtx))
 
 		v1.PUT("/notification/:noti_id", ginnotification.ReadNotification(appCtx))

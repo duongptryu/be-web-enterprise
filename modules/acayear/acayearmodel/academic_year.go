@@ -81,5 +81,10 @@ func (data *AcademicYearUpdate) Validate() error {
 	return nil
 }
 
+type CheckStatusPostIdeaComment struct {
+	CanPostComment bool `json:"can_post_comment"`
+	CanPostIdea    bool `json:"can_post_idea"`
+}
+
 var ErrTimeOverLap = common.NewCustomError(nil, "Time overlap, please check again", "ErrTimeOverLap")
 var ErrOverlapAcaYear = common.NewFullErrorResponse(409, nil, "There is currently an active academic year, please deactivate that academic year or change the status of the academic year you created to false to create", "There is currently an active academic year, please deactivate that academic year or change the status of the academic year you created to false to create", "ErrOverlapAcaYear")

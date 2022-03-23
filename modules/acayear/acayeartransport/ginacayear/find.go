@@ -22,3 +22,17 @@ func FindCurrentAcaYear(appCtx component.AppContext) gin.HandlerFunc {
 		c.JSON(http.StatusOK, common.NewSimpleSuccessResponse(result))
 	}
 }
+
+func CheckCanPostIdeaOrComment(appCtx component.AppContext) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		store := acayearstore.NewSQLStore(appCtx.GetDatabase())
+		biz := acayearbiz.NewFindAcaYear(store)
+
+		result, err := biz.CheckCanCommentOrPostIdea(c.Request.Context())
+		if err != nil {
+			panic(err)
+		}
+
+		c.JSON(http.StatusOK, common.NewSimpleSuccessResponse(result))
+	}
+}
