@@ -18,9 +18,17 @@ func (s *sqlStore) ListDepartment(ctx context.Context,
 
 	db = db.Table(departmentmodel.Department{}.TableName()).Where(condition)
 
-	// if v := filter; v != nil {
-
-	// }
+	if v := filter; v != nil {
+		if v.LeaderName != "" {
+			db = db.Joins("JOIN users on departments.id = user.department_id AND users.role = 'QAC'").Where("users.name LIKE ?", "%"+v.LeaderName+"%")
+		}
+		if v.Name != "" {
+			db = db.Where("name LIKE ?", "%"+v.Name+"%")
+		}
+		if v.Search != "" {
+			db = db.Where("tags LIKE ?", "%"+v.Search+"%")
+		}
+	}
 
 	if err := db.Count(&paging.Total).Error; err != nil {
 		return nil, common.ErrDB(err)
@@ -42,7 +50,6 @@ func (s *sqlStore) ListDepartment(ctx context.Context,
 	return result, nil
 }
 
-
 func (s *sqlStore) ListDepartmentForStaff(ctx context.Context,
 	condition map[string]interface{},
 	moreKey ...string,
@@ -57,10 +64,8 @@ func (s *sqlStore) ListDepartmentForStaff(ctx context.Context,
 		db = db.Preload(moreKey[i])
 	}
 
-
 	if err := db.Order("id desc").Find(&result).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 	return result, nil
 }
-

@@ -2,6 +2,7 @@ package departmentbiz
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"web/common"
 	"web/modules/department/departmentmodel"
 	"web/modules/department/departmentstore"
@@ -17,7 +18,7 @@ func NewUpdateIdeaBiz(store departmentstore.DepartmentStore) *updateDepartmentBi
 	}
 }
 
-func (biz *updateDepartmentBiz) UpdateIdeaBiz(ctx context.Context, departmentId int,  data *departmentmodel.DepartmentUpdate) error {
+func (biz *updateDepartmentBiz) UpdateIdeaBiz(ctx context.Context, departmentId int, data *departmentmodel.DepartmentUpdate) error {
 	departmentDB, err := biz.store.FindDepartment(ctx, map[string]interface{}{"id": departmentId})
 	if err != nil {
 		return common.ErrCannotUpdateEntity(departmentmodel.EntityName, err)
@@ -30,5 +31,23 @@ func (biz *updateDepartmentBiz) UpdateIdeaBiz(ctx context.Context, departmentId 
 		return common.ErrCannotUpdateEntity(departmentmodel.EntityName, err)
 	}
 
+	go biz.updateTagDepartment(ctx, departmentId)
+
 	return nil
+}
+
+func (biz *updateDepartmentBiz) updateTagDepartment(ctx context.Context, id int) {
+	data, err := biz.store.FindDepartment(ctx, map[string]interface{}{"id": id}, "Leader")
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	updateDepartment := departmentmodel.DepartmentUpdate{
+		Tags: data.SetTags(),
+	}
+	if err := biz.store.UpdateDepartment(ctx, id, &updateDepartment); err != nil {
+		log.Error(err)
+		return
+	}
+	return
 }

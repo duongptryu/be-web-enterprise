@@ -1,6 +1,7 @@
 package usermodel
 
 import (
+	"fmt"
 	"time"
 	"web/common"
 )
@@ -27,6 +28,10 @@ func (User) TableName() string {
 	return "users"
 }
 
+func (data *User) SetTags() string {
+	return fmt.Sprintf("%v,%v,%v,%v,%v,%v", data.FullName, data.Email, data.Gender, data.DateOfBirth, data.Role, data.Status)
+}
+
 type UserCreate struct {
 	common.SQLModelCreate
 	FullName     string    `json:"full_name" gorm:"full_name" binding:"required"`
@@ -38,10 +43,15 @@ type UserCreate struct {
 	DateOfBirth  time.Time `json:"date_of_birth" gorm:"date_of_birth" binding:"required"`
 	Role         string    `json:"role" gorm:"role" binding:"required"`
 	Status       bool      `json:"status" gorm:"status"`
+	Tags         string    `json:"-" gorm:"column:tags"`
 }
 
 func (UserCreate) TableName() string {
 	return User{}.TableName()
+}
+
+func (data *UserCreate) SetTags() string {
+	return fmt.Sprintf("%v,%v,%v,%v,%v,%v", data.FullName, data.Email, data.Gender, data.DateOfBirth, data.Role, data.Status)
 }
 
 func (data *UserCreate) Validate() error {
@@ -58,6 +68,7 @@ type UserUpdate struct {
 	DateOfBirth  time.Time `json:"date_of_birth" gorm:"date_of_birth"`
 	Role         string    `json:"role" gorm:"role"`
 	Status       *bool     `json:"status" gorm:"status"`
+	Tags         string    `json:"-" gorm:"column:tags"`
 }
 
 func (UserUpdate) TableName() string {
@@ -74,6 +85,7 @@ type UserUpdateSelf struct {
 	Avatar      string    `json:"avatar" gorm:"avatar"`
 	Gender      string    `json:"gender" gorm:"gender"`
 	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth"`
+	Tags        string    `json:"-" gorm:"column:tags"`
 }
 
 func (UserUpdateSelf) TableName() string {

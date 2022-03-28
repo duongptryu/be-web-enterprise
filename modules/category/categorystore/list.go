@@ -18,9 +18,14 @@ func (s *sqlStore) ListCategory(ctx context.Context,
 
 	db = db.Table(categorymodel.Category{}.TableName()).Where(condition)
 
-	// if v := filter; v != nil {
-
-	// }
+	if v := filter; v != nil {
+		if v.Name != "" {
+			db = db.Where("name LIKE ?", "%"+v.Name+"%")
+		}
+		if v.Search != "" {
+			db = db.Where("tags LIKE ?", "%"+v.Search+"%")
+		}
+	}
 
 	if err := db.Count(&paging.Total).Error; err != nil {
 		return nil, common.ErrDB(err)

@@ -53,7 +53,7 @@ func (biz *createUserBiz) CreateUserBiz(ctx context.Context, data *usermodel.Use
 		return common.ErrCannotCreateEntity(usermodel.EntityName, err)
 	}
 	data.Password = string(hashedPassword)
-
+	data.Tags = data.SetTags()
 	//create user in db
 	if err := biz.store.CreateUser(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(usermodel.EntityName, err)

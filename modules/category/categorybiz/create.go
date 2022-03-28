@@ -18,6 +18,7 @@ func NewCreateCategoryBiz(store categorystore.CategoryStore) *createCategoryBiz 
 }
 
 func (biz *createCategoryBiz) CreateCategoryBiz(ctx context.Context, data *categorymodel.CategoryCreate) error {
+	data.Tags = data.SetTags()
 	if err := biz.store.CreateCategory(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(categorymodel.EntityName, err)
 	}

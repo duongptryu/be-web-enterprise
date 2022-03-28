@@ -1,6 +1,8 @@
 package commentmodel
 
-import "web/common"
+import (
+	"web/common"
+)
 
 const (
 	EntityName = "Comment"
@@ -31,6 +33,7 @@ type CommentCreate struct {
 	RepliesCount int    `json:"-" gorm:"column:replies_count"`
 	Status       bool   `json:"-" gorm:"status"`
 	IsAnonymous  bool   `json:"is_anonymous" gorm:"column:is_anonymous"`
+	Tags         string `json:"-" gorm:"column:tags"`
 }
 
 func (CommentCreate) TableName() string {

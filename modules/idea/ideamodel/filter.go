@@ -16,4 +16,5 @@ type Filter struct {
 	DislikeSt      int    `json:"dislike_st" form:"dislike_st"`
 	ViewSt         int    `json:"view_st" form:"view_st"`
 	Order          string `json:"order_by" form:"order_by"`
+	Search         string `json:"search" form:"search"`
 }

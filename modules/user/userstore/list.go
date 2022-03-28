@@ -34,6 +34,9 @@ func (s *sqlStore) ListUser(ctx context.Context,
 		if v.FullName != "" {
 			db = db.Where("full_name LIKE ?", "%"+v.FullName+"%")
 		}
+		if v.Search != "" {
+			db = db.Where("tags LIKE ?", "%"+v.Search+"%")
+		}
 	}
 
 	if err := db.Count(&paging.Total).Error; err != nil {

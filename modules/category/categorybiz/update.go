@@ -2,6 +2,7 @@ package categorybiz
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"web/common"
 	"web/modules/category/categorymodel"
 	"web/modules/category/categorystore"
@@ -26,10 +27,27 @@ func (biz *updateCategoryBiz) UpdateCategoryBiz(ctx context.Context, cateId int,
 		return common.ErrDataNotFound(categorymodel.EntityName)
 	}
 
-	//create user in db
 	if err := biz.store.UpdateCategory(ctx, cateId, data); err != nil {
 		return common.ErrCannotUpdateEntity(categorymodel.EntityName, err)
 	}
 
+	go biz.updateTagDepartment(ctx, cateId)
+
 	return nil
+}
+
+func (biz *updateCategoryBiz) updateTagDepartment(ctx context.Context, id int) {
+	data, err := biz.store.FindCategory(ctx, map[string]interface{}{"id": id})
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	updateCategory := categorymodel.CategoryUpdate{
+		Tags: data.SetTags(),
+	}
+	if err := biz.store.UpdateCategory(ctx, id, &updateCategory); err != nil {
+		log.Error(err)
+		return
+	}
+	return
 }

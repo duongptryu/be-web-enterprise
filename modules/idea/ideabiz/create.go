@@ -77,6 +77,7 @@ func (biz *createIdeaBiz) CreateIdeaBiz(ctx context.Context, data *ideamodel.Ide
 	data.DepartmentId = owner.DepartmentId
 	data.AcaYearId = acaExist.Id
 	data.Status = true
+	data.Tags = data.SetTags()
 	if err := biz.store.CreateIdea(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(ideamodel.EntityName, err)
 	}

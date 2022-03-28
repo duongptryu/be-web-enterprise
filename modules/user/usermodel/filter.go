@@ -6,4 +6,5 @@ type Filter struct {
 	Email        string `json:"email" form:"email"`
 	FullName     string `json:"full_name" form:"full_name"`
 	Status       string `json:"status" form:"status"`
+	Search       string `json:"search" form:"search"`
 }

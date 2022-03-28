@@ -61,6 +61,9 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 		if v.AcaYear != "" {
 			db = db.Joins("JOIN academic_years on academic_years.id = ideas.aca_year_id").Where("academic_years.name LIKE ?", "%"+v.AcaYear+"%")
 		}
+		if v.Search != "" {
+			db = db.Where("tags LIKE ?", "%"+v.Search+"%")
+		}
 		if v.Order != "" {
 			switch v.Order {
 			case "like_desc":

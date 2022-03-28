@@ -1,6 +1,7 @@
 package ideamodel
 
 import (
+	"fmt"
 	"web/common"
 	"web/modules/category/categorymodel"
 )
@@ -34,6 +35,10 @@ func (Idea) TableName() string {
 	return "ideas"
 }
 
+func (data *Idea) SetTags() string {
+	return fmt.Sprintf("%v,%v,%v,%v,%v,%v", data.Title, data.Content, data.User.FullName, data.Category.Name, data.Department.Name, data.Status)
+}
+
 func (data *Idea) GetIdeaId() int {
 	return data.Id
 }
@@ -54,10 +59,15 @@ type IdeaCreate struct {
 	Files         *common.Files `json:"files" gorm:"column:files"`
 	IsAnonymous   bool          `json:"is_anonymous" gorm:"column:is_anonymous"`
 	DepartmentId  int           `json:"-" gorm:"column:department_id"`
+	Tags          string        `json:"-" gorm:"column:tags"`
 }
 
 func (IdeaCreate) TableName() string {
 	return Idea{}.TableName()
+}
+
+func (data *IdeaCreate) SetTags() string {
+	return fmt.Sprintf("%v,%v,%v,%v,%v,%v", data.Title, data.Content, data.Status)
 }
 
 type IdeaUpdate struct {
@@ -67,6 +77,7 @@ type IdeaUpdate struct {
 	ThumbnailUrl string        `json:"thumbnail_url" gorm:"column:thumbnail_url"`
 	Status       *bool         `json:"-" gorm:"column:status"`
 	Files        *common.Files `json:"files" gorm:"column:files"`
+	Tags         string        `json:"-" gorm:"column:tags"`
 }
 
 func (IdeaUpdate) TableName() string {

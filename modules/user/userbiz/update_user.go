@@ -2,6 +2,7 @@ package userbiz
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
 	"web/common"
 	"web/modules/department/departmentmodel"
 	"web/modules/department/departmentstore"
@@ -51,6 +52,8 @@ func (biz *updateUserBiz) UpdateUserBiz(ctx context.Context, userId int, data *u
 		return common.ErrCannotUpdateEntity(usermodel.EntityName, err)
 	}
 
+	go biz.updateTagUser(ctx, userId)
+
 	return nil
 }
 
@@ -71,5 +74,23 @@ func (biz *updateUserBiz) UpdateUserSelfBiz(ctx context.Context, userId int, dat
 		return common.ErrCannotUpdateEntity(usermodel.EntityName, err)
 	}
 
+	go biz.updateTagUser(ctx, userId)
+
 	return nil
+}
+
+func (biz *updateUserBiz) updateTagUser(ctx context.Context, userId int) {
+	data, err := biz.store.FindUser(ctx, map[string]interface{}{"id": userId})
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	userUpdate := usermodel.UserUpdate{
+		Tags: data.SetTags(),
+	}
+	if err := biz.store.UpdateUser(ctx, userId, &userUpdate); err != nil {
+		log.Error(err)
+		return
+	}
+	return
 }

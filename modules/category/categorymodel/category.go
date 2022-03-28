@@ -1,6 +1,9 @@
 package categorymodel
 
-import "web/common"
+import (
+	"fmt"
+	"web/common"
+)
 
 const EntityName = "Category"
 
@@ -14,10 +17,19 @@ func (Category) TableName() string {
 	return "categories"
 }
 
+func (data *Category) SetTags() string {
+	return fmt.Sprintf("%v,%v", data.Name, data.Status)
+}
+
 type CategoryCreate struct {
 	common.SQLModelCreate
 	Name   string `json:"name" gorm:"name" binding:"required"`
 	Status bool   `json:"status" gorm:"status"`
+	Tags   string `json:"-" gorm:"column:tags"`
+}
+
+func (data *CategoryCreate) SetTags() string {
+	return fmt.Sprintf("%v,%v", data.Name, data.Status)
 }
 
 func (CategoryCreate) TableName() string {
@@ -28,6 +40,7 @@ type CategoryUpdate struct {
 	common.SQLModelUpdate
 	Name   string `json:"name" gorm:"name"`
 	Status *bool  `json:"status" gorm:"status"`
+	Tags   string `json:"-" gorm:"column:tags"`
 }
 
 func (CategoryUpdate) TableName() string {

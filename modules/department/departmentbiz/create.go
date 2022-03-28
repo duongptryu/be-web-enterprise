@@ -34,8 +34,8 @@ func (biz *createDepartmentBiz) CreateDepartment(ctx context.Context, data *depa
 		return departmentmodel.ErrInvalidLeaderId
 	}
 
-
 	data.Status = true
+	data.Tags = data.SetTags()
 	if err := biz.departmentStore.CreateDepartment(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(departmentmodel.EntityName, err)
 	}
