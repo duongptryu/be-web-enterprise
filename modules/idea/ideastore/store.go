@@ -35,4 +35,12 @@ type IdeaStore interface {
 		condition map[string]interface{},
 		moreKey ...string,
 	) ([]ideamodel.Idea, error)
+	CountIdeaByCategoryId(ctx context.Context,
+		categoryIds []int,
+		moreKey ...string,
+	) (map[int]int, error)
+	CountUserPostIdea(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) (map[int]int, error)
 }

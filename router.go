@@ -82,7 +82,11 @@ func v1Route(r *gin.Engine, appCtx component.AppContext) {
 				stats.GET("/idea", ginstatistic.ListStatisticIdea(appCtx))
 				stats.GET("/overview", ginstatistic.ListStatisticTotal(appCtx))
 				stats.GET("/user", ginstatistic.ListStatisticUser(appCtx))
+				stats.GET("/idea-by-category", ginstatistic.ListCountIdeaByCategory(appCtx))
+				stats.GET("/user/:user_id", ginstatistic.ListStatisticEachUser(appCtx))
 			}
+
+			QAM.GET("/users", ginuser.ListALlUser(appCtx))
 
 		}
 

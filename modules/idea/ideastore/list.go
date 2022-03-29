@@ -107,3 +107,62 @@ func (s *sqlStore) ListIdea(ctx context.Context,
 	}
 	return result, nil
 }
+
+func (s *sqlStore) CountIdeaByCategoryId(ctx context.Context,
+	categoryIds []int,
+	moreKey ...string,
+) (map[int]int, error) {
+	type countIdea struct {
+		CategoryId int `json:"category_id"`
+		Count      int `json:"count"`
+	}
+
+	var query []countIdea
+
+	db := s.db
+
+	db = db.Table(ideamodel.Idea{}.TableName()).Select("category_id, count(*) AS count").Where("category_id IN ?", categoryIds).Group("category_id")
+
+	if err := db.Find(&query).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+
+	var result = make(map[int]int, len(query))
+
+	for i, _ := range query {
+		result[query[i].CategoryId] = query[i].Count
+	}
+
+	return result, nil
+}
+
+func (s *sqlStore) CountUserPostIdea(ctx context.Context,
+	condition map[string]interface{},
+	moreKey ...string,
+) (map[int]int, error) {
+	type countIdea struct {
+		UserId int `json:"user_id"`
+		Count  int `json:"count"`
+	}
+
+	var query []countIdea
+
+	db := s.db
+
+	db = db.Where(condition)
+
+	db = db.Table(ideamodel.Idea{}.TableName()).Select("user_id, count(*) AS count").Group("user_id")
+
+	if err := db.Find(&query).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+
+	var result = make(map[int]int, len(query))
+
+	for i, _ := range query {
+		result[query[i].UserId] = query[i].Count
+	}
+
+	return result, nil
+}
+

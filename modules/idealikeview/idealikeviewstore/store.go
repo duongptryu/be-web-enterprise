@@ -70,4 +70,8 @@ type UserLikeViewIdeaStore interface {
 		condition map[string]interface{},
 		moreKey ...string,
 	) (map[int]int, error)
+	CountUserViewIdea(ctx context.Context,
+		condition map[string]interface{},
+		moreKey ...string,
+	) (map[int]int, error)
 }

@@ -29,3 +29,17 @@ type StatisticRespUser struct {
 	UsersId          []int    `json:"users_id"`
 	UsersInteractive []int    `json:"users_interactive"`
 }
+
+type StatisticCountIdeaCategory struct {
+	CategoryId   int    `json:"category_id"`
+	CategoryName string `json:"category_name"`
+	NumberIdea   int    `json:"number_idea"`
+}
+
+type StatisticEachUser struct {
+	LikeCount     int `json:"like_count"`
+	DislikeCount  int `json:"dislike_count"`
+	CommentCount  int `json:"comment_count"`
+	PostIdeaCount int `json:"post_idea_count"`
+	ViewCount     int `json:"view_count"`
+}

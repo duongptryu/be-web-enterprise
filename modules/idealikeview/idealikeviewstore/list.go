@@ -215,3 +215,33 @@ func (s *sqlStore) CountUserDisLike(ctx context.Context,
 	}
 	return result, nil
 }
+
+func (s *sqlStore) CountUserViewIdea(ctx context.Context,
+	condition map[string]interface{},
+	moreKey ...string,
+) (map[int]int, error) {
+	var result = make(map[int]int)
+
+	type sqlData struct {
+		UserId    int `gorm:"column:user_id"`
+		ViewCount int `gorm:"column:count"`
+	}
+
+	var viewIdeaCount []sqlData
+	db := s.db
+
+	db = db.Table(idealikeviewmodel.UserViewIdea{}.TableName()).Where(condition)
+
+	for i := range moreKey {
+		db = db.Preload(moreKey[i])
+	}
+
+	if err := db.Select("user_id, count(user_id) as count").Group("user_id").Find(&viewIdeaCount).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+
+	for _, v := range viewIdeaCount {
+		result[v.UserId] = v.ViewCount
+	}
+	return result, nil
+}

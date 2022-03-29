@@ -41,3 +41,17 @@ func ListUser(appCtx component.AppContext) gin.HandlerFunc {
 		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
 	}
 }
+
+func ListALlUser(appCtx component.AppContext) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		store := userstore.NewSQLStore(appCtx.GetDatabase())
+		biz := userbiz.NewListUserBiz(store)
+
+		result, err := biz.ListAllUserBiz(c.Request.Context())
+		if err != nil {
+			panic(err)
+		}
+
+		c.JSON(http.StatusOK, common.NewSimpleSuccessResponse(result))
+	}
+}
