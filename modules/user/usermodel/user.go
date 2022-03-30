@@ -66,6 +66,7 @@ type UserUpdate struct {
 	Gender       string    `json:"gender" gorm:"gender"`
 	DepartmentId int       `json:"department_id" gorm:"department_id"`
 	DateOfBirth  time.Time `json:"date_of_birth" gorm:"date_of_birth"`
+	Password     string    `json:"password" gorm:"column:password"`
 	Role         string    `json:"role" gorm:"role"`
 	Status       *bool     `json:"status" gorm:"status"`
 	Tags         string    `json:"-" gorm:"column:tags"`
@@ -85,6 +86,7 @@ type UserUpdateSelf struct {
 	Avatar      string    `json:"avatar" gorm:"avatar"`
 	Gender      string    `json:"gender" gorm:"gender"`
 	DateOfBirth time.Time `json:"date_of_birth" gorm:"date_of_birth"`
+	Password    string    `json:"password" gorm:"column:password"`
 	Tags        string    `json:"-" gorm:"column:tags"`
 }
 

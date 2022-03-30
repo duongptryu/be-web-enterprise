@@ -3,6 +3,7 @@ package userbiz
 import (
 	"context"
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/crypto/bcrypt"
 	"web/common"
 	"web/modules/department/departmentmodel"
 	"web/modules/department/departmentstore"
@@ -47,6 +48,11 @@ func (biz *updateUserBiz) UpdateUserBiz(ctx context.Context, userId int, data *u
 		data.DepartmentId = 0
 	}
 
+	if data.Password != "" {
+		newPass, _ := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+		data.Password = string(newPass)
+	}
+
 	//create user in db
 	if err := biz.store.UpdateUser(ctx, userId, data); err != nil {
 		return common.ErrCannotUpdateEntity(usermodel.EntityName, err)
@@ -68,6 +74,11 @@ func (biz *updateUserBiz) UpdateUserSelfBiz(ctx context.Context, userId int, dat
 	}
 	if userDB.Id == 0 {
 		return common.ErrDataNotFound(usermodel.EntityName)
+	}
+
+	if data.Password != "" {
+		newPass, _ := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+		data.Password = string(newPass)
 	}
 
 	if err := biz.store.UpdateUserSelf(ctx, userId, data); err != nil {
