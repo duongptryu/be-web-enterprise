@@ -20,7 +20,7 @@ func NewStatisticTotalBiz(ideaStore ideastore.IdeaStore, userStore userstore.Use
 }
 
 func (biz *statisticTotalBiz) StatisticTotalBiz(ctx context.Context) (*statisticmodel.StatisticRespTotal, error) {
-	ideas, err := biz.ideaStore.ListALlIdea(ctx, nil)
+	ideas, err := biz.ideaStore.ListALlIdea(ctx, nil, nil)
 	if err != nil {
 		return nil, err
 	}

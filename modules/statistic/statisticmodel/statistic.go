@@ -2,7 +2,7 @@ package statisticmodel
 
 type StatisticReq struct {
 	DepartmentId int `json:"department_id" form:"department_id"`
-	AcaYearId    int `json:"aca_year_id" gorm:"aca_year_id"`
+	AcaYearId    int `json:"aca_year_id" form:"aca_year_id"`
 }
 
 type StatisticUser struct {
@@ -16,6 +16,11 @@ type StatisticRespIdea struct {
 	DislikeCount []int    `json:"dislike_count"`
 	ViewCount    []int    `json:"view_count"`
 	CommentCount []int    `json:"comment_count"`
+}
+
+type StatisticRespIdeaByDay struct {
+	CountIdea []int    `json:"count_idea"`
+	Days      []string `json:"days"`
 }
 
 type StatisticRespTotal struct {

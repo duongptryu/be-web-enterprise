@@ -33,6 +33,7 @@ type IdeaStore interface {
 	UpdateIdea(ctx context.Context, id int, data *ideamodel.IdeaUpdate) error
 	ListALlIdea(ctx context.Context,
 		condition map[string]interface{},
+		filter *ideamodel.Filter,
 		moreKey ...string,
 	) ([]ideamodel.Idea, error)
 	CountIdeaByCategoryId(ctx context.Context,

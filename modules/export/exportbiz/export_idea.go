@@ -35,7 +35,7 @@ func (biz *exportIdeaBiz) ExportIdeaBiz(ctx context.Context, data *exportmodel.E
 
 	data.NameAcaYear = acaYearExist.Title
 
-	ideas, err := biz.ideaStore.ListALlIdea(ctx, map[string]interface{}{"aca_year_id": acaYearExist.Id}, "User", "Category", "Department")
+	ideas, err := biz.ideaStore.ListALlIdea(ctx, map[string]interface{}{"aca_year_id": acaYearExist.Id}, nil, "User", "Category", "Department")
 	if err != nil {
 		return nil, err
 	}

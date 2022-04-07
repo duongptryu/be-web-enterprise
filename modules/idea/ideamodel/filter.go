@@ -1,5 +1,7 @@
 package ideamodel
 
+import "time"
+
 type Filter struct {
 	Title          string `json:"title" form:"title"`
 	UserId         int    `json:"user_id" form:"user_id"`
@@ -17,4 +19,5 @@ type Filter struct {
 	ViewSt         int    `json:"view_st" form:"view_st"`
 	Order          string `json:"order_by" form:"order_by"`
 	Search         string `json:"search" form:"search"`
+	CreatedAtGt    *time.Time
 }
