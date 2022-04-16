@@ -56,11 +56,6 @@ func (biz *userBiz) UserLogin(ctx context.Context, data *usermodel.UserLogin) (*
 	if err != nil {
 		return nil, common.ErrInternal(err)
 	}
-	//
-	//refreshToken, err := biz.tokenProvider.Generate(&payload, biz.expire)
-	//if err != nil {
-	//	return nil, common.ErrInternal(err)
-	//}
 
 	account := usermodel.NewAccount(accessToken.Token, nil, userDB)
 

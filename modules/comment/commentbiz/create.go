@@ -70,11 +70,18 @@ func (biz *createCommentBiz) CreateCommentBiz(ctx context.Context, data *comment
 	}
 
 	go func(b *createCommentBiz, ownerId int, ideaId int, content string, commenterId int) {
-		users, err := b.userStore.ListUserWithoutPaging(ctx, map[string]interface{}{"id": []int{ownerId, commenterId}})
+		owner, err := b.userStore.FindUser(ctx, map[string]interface{}{"id": ownerId})
 		if err != nil {
 			log.Error(err)
 		}
-		go b.mailProvider.SendMailNotifyNewComment(ctx, &mailprovider.MailDataForComment{CommentContent: content, Email: users[0].Email, Name: users[0].FullName, CommentBy: users[0].FullName, CreatedAt: time.Now()})
+		commenter, err := b.userStore.FindUser(ctx, map[string]interface{}{"id": commenterId})
+		if err != nil {
+			log.Error(err)
+		}
+		if data.IsAnonymous {
+			commenter.FullName = "Anonymous"
+		}
+		go b.mailProvider.SendMailNotifyNewComment(ctx, &mailprovider.MailDataForComment{CommentContent: content, Email: owner.Email, Name: owner.FullName, CommentBy: commenter.FullName, CreatedAt: time.Now()})
 
 		if ownerId == commenterId {
 			return

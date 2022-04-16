@@ -36,7 +36,6 @@ func runService() {
 
 	r := gin.Default()
 	r.Use(cors.Default())
-
 	setupRouter(r, appCtx)
 
 	r.Run(":" + appConfig.Server.Port)

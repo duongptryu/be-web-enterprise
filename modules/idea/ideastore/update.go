@@ -19,7 +19,8 @@ func (s *sqlStore) UpdateIdea(ctx context.Context, id int, data *ideamodel.IdeaU
 func (s *sqlStore) IncreaseLikeCountIdea(ctx context.Context, id int) error {
 	db := s.db
 
-	if err := db.Table(ideamodel.IdeaUpdate{}.TableName()).Where("id = ?", id).Update("likes_count", gorm.Expr("likes_count + ?", 1)).Error; err != nil {
+	if err := db.Table(
+		ideamodel.IdeaUpdate{}.TableName()).Where("id = ?", id).Update("likes_count", gorm.Expr("likes_count + ?", 1)).Error; err != nil {
 		return common.ErrDB(err)
 	}
 	return nil
